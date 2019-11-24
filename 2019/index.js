@@ -1,8 +1,20 @@
 let express = require('express');
 
+const day01 = require('./day-01')
+
 const PORT = 8080;
 
 let app = express();
+
+function formatResult(result) {
+  return `
+    <h1>${result.title}</h1>
+    <ui>
+      <li>Part 1: ${result.part1.answer} (${result.part1.time} ms)</li>
+      <li>Part 2: ${result.part2.answer} (${result.part2.time} ms)</li>
+    <ui>
+  `
+}
 
 app.get('/', (req, res) => {
   res.send(template(`
@@ -11,41 +23,13 @@ app.get('/', (req, res) => {
   `));
 });
 
+app.get('/day-01', (req, res) => {
+  res.send(template(formatResult(day01.run())));
+});
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}...`);
 });
-
-/*
-let template = body => `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <style>
-        body { font-family: sans-serif; }
-        header { display: flex; padding: 10px; }
-        .links { margin: auto; }
-        main { padding: 10px; }
-        .logo { font-size: 18px; letter-spacing: 2px; }
-        .link { margin-right: 15px; }
-      </style>
-    </head>
-    <body>
-      <header>
-        <div class="logo">2019 Advent of Code</div>
-        <div class="links">
-          <a class="link" href="/">Home</a>
-          <a class="link" href="/about">About</a>
-          <a class="link" href="/page-1">Page 1</a>
-          <a class="link" href="/page-2">Page 2</a>
-        </div>
-      </header>
-      <main>${body}</main>
-      <footer>
-      </footer>
-    </body>
-  </html>
-`;
-*/
 
 let template = body => `
   <!DOCTYPE html>
@@ -79,7 +63,9 @@ let template = body => `
           display: flex;
           align-items: center;
           justify-content: center;
+          padding: 10px;
         }
+
         main,
         aside {
           background: #eaeaea;
@@ -89,20 +75,25 @@ let template = body => `
         }
       </style>
     </head>
+
     <body>
       <header>
       <div class="logo">2019 Advent of Code</div>
       </header>
+
       <aside>
         <a class="link" href="/">Home</a>
-        <a class="link" href="/day-1">Day 1</a>
+        <a class="link" href="/day-01">Day 1</a>
       </aside>
+
       <main>
         ${body}
       </main>
+
       <footer>
         <p>&copy; 2019 Dave Follett</p>
       </footer>
+
     </body>
   <html>
   `;
