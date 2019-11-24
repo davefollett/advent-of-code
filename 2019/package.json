@@ -1,0 +1,18 @@
+{
+  "name": "advent-of-code-2019",
+  "version": "0.0.1",
+  "description": "2019 Advent of Code",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js localhost 8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dave Follett",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
