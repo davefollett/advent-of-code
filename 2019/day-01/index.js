@@ -1,3 +1,5 @@
+// https://adventofcode.com/2019/day/1
+
 const readline = require("readline");
 const fs = require("fs");
 const { performance } = require("perf_hooks");
@@ -14,30 +16,45 @@ let results = {
   }
 };
 
-function part1() {
-  return new Promise((resolve, reject) => {
-    var sum = 0;
-    const rl = readline.createInterface({
-      input: fs.createReadStream("./day-01/input.txt"),
-      crlfDelay: Infinity
-    });
-
-    rl.on("line", line => {
-      sum += parseInt(line, 10);
-    })
-      .on("close", () => {
-        resolve(sum.toString());
-      })
-      .on("error", err => {
-        reject(err); // rejecting the error, so we can catch it in the promise chain
-      });
-  });
+// Fuel is calculated by taking mass, divide it by three, rounding down, and
+// subtracting 2.
+function calcFuel(mass) {
+  return Math.floor(mass / 3) - 2;
 }
 
-exports.run = async function run() {
-  const start = performance.now();
-  results.part1.answer = await part1();
+function part1() {
+  return fs.readFileSync("./day-01/input.txt", 'utf-8')
+    .split(require('os').EOL)
+    .reduce((acc, mass) => {
+      return acc + calcFuel(mass);
+    }, 0);
+}
+
+function part2() {
+
+  return fs.readFileSync("./day-01/input.txt", 'utf-8')
+    .split(require('os').EOL)
+    .reduce((acc, mass) => {
+      do {
+        mass = calcFuel(mass);
+
+        if(mass > 0) {
+          acc += mass;
+        }
+      } while(mass >= 0);
+
+      return acc;
+    }, 0);
+}
+
+exports.run = function run() {
+  let start = performance.now();
+  results.part1.answer = part1();
   results.part1.time = (performance.now() - start).toFixed(2);
+
+  start = performance.now();
+  results.part2.answer = part2();
+  results.part2.time = (performance.now() - start).toFixed(2);
 
   return results;
 };

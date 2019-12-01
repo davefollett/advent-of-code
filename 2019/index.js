@@ -1,5 +1,4 @@
 let express = require("express");
-
 const day01 = require("./day-01");
 
 const PORT = 8080;
@@ -26,8 +25,8 @@ app.get("/", (req, res) => {
   );
 });
 
-app.get("/day-01", async (req, res) => {
-  const results = await day01.run();
+app.get("/day-01", (req, res) => {
+  const results = day01.run();
   res.send(template(formatResult(results)));
 });
 
