@@ -19,7 +19,7 @@ function formatResult(result) {
 app.get("/", (req, res) => {
   res.send(
     template(`
-    <h1>Welcome to the Dave Follett's Advent of Code Solutions.</h1>
+    <h1>Welcome to Dave Follett's Advent of Code Solutions.</h1>
     <p>Click each link in the sidebar to run each day's solution.</p>
   `)
   );
@@ -35,71 +35,86 @@ app.listen(PORT, () => {
 });
 
 let template = body => `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <title>Dave Follett's 2019 Advent of Code</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-      <style>
-        body {
-          font-family: sans-serif;
-          display: grid;
-          grid-template-columns: 15% 85%;
-          grid-template-rows: 10vw 30vw 10vw;
-          grid-gap: 1em;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dave Follett's 2019 Advent of Code</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+
+    <style>
+
+      html, body, pre, code, kbd, samp {
+        font-family: 'Press Start 2P', cursive;
+        background-color: #212529;
+      }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: 200px auto;
+        grid-gap: 1em;
+      }
+
+      header, footer {
+        grid-column: 1 / 3;
+      }
+
+      @media all and (max-width: 700px) {
+        aside,
+        main {
+          grid-column: 1 / 3;
         }
+      }
 
-        
-        header,
-        footer {
-          grid-column: 1 / span 2;
-        }
+      body {
+        margin: 0 auto;
+        max-width: 56em;
+        padding: 1em 0;
+      }
 
-        /* Demo Specific Styles */
-        body {
-          margin: 0 auto;
-          max-width: 56em;
-          padding: 1em 0;
-        }
+      header,
+      aside,
+      main,
+      footer {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+      }
 
-        header,
-        footer {
-          background: #eaeaea;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 10px;
-        }
+      .cell {
+        flex: 1;
+      }
 
-        main,
-        aside {
-          background: #eaeaea;
-          display: flex;
-          flex-direction: column;
-          align-items: left;
-        }
-      </style>
-    </head>
+    </style>
+  </head>
 
-    <body>
-      <header>
-        <img class="float-left" src="header-logo.svg" height="100%" alt="Card image cap" />
-        <h1 class="display-4">2019 Advent of Code</h1>
-      </header>
-
-      <aside>
-        <a class="link" href="/">Home</a>
-        <a class="link" href="/day-01">Day 1</a>
-      </aside>
-
-      <main>
-        ${body}
-      </main>
-
-      <footer>
-        <p>&copy; 2019 Dave Follett</p>
-      </footer>
-
-    </body>
-  <html>
-  `;
+  <body>
+    <div class="grid">
+        <header>
+          <div class="cell nes-container is-dark">
+            <h1>2019 Advent of Code</h1>
+          </div>
+        </header>
+      
+        <aside>
+          <div class="cell nes-container is-dark">
+            <a class="link" href="/">Home</a><br>
+            <a class="link" href="/day-01">Day 1</a>
+          </div>
+        </aside>
+      
+        <main>
+          <div class="cell nes-container is-dark">
+              <p >${body}</p>
+            </div>
+        </main>
+      
+        <footer>
+          <div class="cell nes-container is-dark">
+            <p>&copy; 2019 Dave Follett</p>
+          </div>
+        </footer>
+      </div>
+  </body>
+<html>
+`;
