@@ -1,6 +1,6 @@
-let express = require('express');
+let express = require("express");
 
-const day01 = require('./day-01')
+const day01 = require("./day-01");
 
 const PORT = 8080;
 
@@ -14,18 +14,21 @@ function formatResult(result) {
       <li>Part 1: ${result.part1.answer} (${result.part1.time} ms)</li>
       <li>Part 2: ${result.part2.answer} (${result.part2.time} ms)</li>
     <ui>
-  `
+  `;
 }
 
-app.get('/', (req, res) => {
-  res.send(template(`
+app.get("/", (req, res) => {
+  res.send(
+    template(`
     <h1>Welcome to the Dave Follett's Advent of Code Solutions.</h1>
     <p>Click each link in the sidebar to run each day's solution.</p>
-  `));
+  `)
+  );
 });
 
-app.get('/day-01', (req, res) => {
-  res.send(template(formatResult(day01.run())));
+app.get("/day-01", async (req, res) => {
+  const results = await day01.run();
+  res.send(template(formatResult(results)));
 });
 
 app.listen(PORT, () => {
@@ -47,6 +50,7 @@ let template = body => `
           grid-gap: 1em;
         }
 
+        
         header,
         footer {
           grid-column: 1 / span 2;
