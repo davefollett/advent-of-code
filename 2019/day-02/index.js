@@ -23,10 +23,13 @@ const MULTIPLY = 2;
 function initProgram(noun, verb) {
   let program = fs.readFileSync("./day-02/input.txt", 'utf-8').split(',');
   //let program = fs.readFileSync("./day-02/test.txt", 'utf-8').split(',');
-  //console.log(program)
   program[1] = noun;
   program[2] = verb;
   return program;
+}
+
+function incrementIndex(index) {
+  return index += 4;
 }
 
 function getOpcode(program, index) {
@@ -46,6 +49,7 @@ function getPosition(program, index) {
 }
 
 function part1(noun, verb) {
+  
   program = initProgram(noun, verb);
 
   let index = 0;
@@ -55,48 +59,42 @@ function part1(noun, verb) {
   let position = getPosition(program, index);
 
   while(opcode !== HALT) {
-    //console.log(`op: ${opcode}`)
+
     if(opcode === ADD) {
-      //console.log(`adding: ${valueOne} ${valueTwo} to ${position}`)
       program[position] = valueOne + valueTwo;
     } else if( opcode === MULTIPLY) {
-      
-      //console.log(`multiply: ${valueOne} ${valueTwo}`)
       program[position] = valueOne * valueTwo;
     } else {
-      //console.error("opcode error")
+      console.error("opcode error")
       break;
     }
-    //console.log(program)
-    index += 4;
+
+    index = incrementIndex(index);
     opcode = getOpcode(program, index);
     valueOne = getValueOne(program, index);
     valueTwo = getValueTwo(program, index);
     position = getPosition(program, index);
   }
 
-  //console.log(program)
   return program[0];
 }
 
 function part2() {
-  let result = 0;
 
   for(let noun = 0; noun <= 99; noun++) {
     for(let verb = 0; verb <= 99; verb++) {
       if(part1(noun,verb) === 19690720 ) {
-        result = (100 * noun) + verb;
-        break
+        return (100 * noun) + verb;
       }
     }
   }
 
-  return result;
+  return 0;
 }
 
 exports.run = function run() {
   let start = performance.now();
-  results.part1.answer = part1(12,2);
+  results.part1.answer = part1(12, 2);
   results.part1.time = (performance.now() - start).toFixed(2);
 
   start = performance.now();
