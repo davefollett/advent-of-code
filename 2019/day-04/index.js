@@ -1,7 +1,5 @@
 // https://adventofcode.com/2019/day/4
 
-const readline = require("readline");
-const fs = require("fs");
 const { performance } = require("perf_hooks");
 
 let results = {
@@ -16,24 +14,66 @@ let results = {
   }
 };
 
+function doubleOrMore(count) {
+  return count >= 1;
+}
 
+function doubleExactly(count) {
+  return count === 1;
+}
 
-function init() {
+function numberOfValidPasswords(doubleCheck) {
 
-  let wires = fs.readFileSync("./day-04/input.txt", 'utf-8').split(require('os').EOL)
-  //let wires = fs.readFileSync("./day-04/test.txt", 'utf-8').split(require('os').EOL)
+  let validPasswords = 0;
 
-  return 0;
+  const MIN = 108457;
+  const MAX = 562041;
+
+  for(let pass = MIN; pass <= MAX; pass++) {
+
+    let neverDecreases = true;
+    let hasDouble = false;
+
+    let prev = -1;
+    let current = -1;
+    let numberCounts = new Array(10).fill(0);
+    
+    for (const c of pass.toString()) {
+      current = parseInt(c);
+      if(prev !== -1) {
+
+        if(current < prev) {
+          neverDecreases = false;
+          break;
+        }
+        if(current === prev) {
+          numberCounts[current] = numberCounts[current] + 1;
+        }
+      }
+
+      prev = parseInt(current);
+    }
+
+    numberCounts.forEach(function(count) {
+      if(doubleCheck(count)) {
+        hasDouble = true;
+      }
+    })
+
+    if(neverDecreases && hasDouble) {
+      validPasswords += 1;
+    }
+  }
+
+  return validPasswords;
 }
 
 function part1() {
-  
-  return 0;
+  return numberOfValidPasswords(doubleOrMore);
 }
 
 function part2() {
-  
-  return 0;
+  return numberOfValidPasswords(doubleExactly);
 }
 
 exports.run = function run() {
