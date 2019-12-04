@@ -16,160 +16,96 @@ let results = {
   }
 };
 
-let wireOne = [];
-let wireTwo = [];
-let wireCross = [];
-
-
 function getDistance(point1X, point1Y, point2X, point2Y) {
-  const result = Math.abs(point2X - point1X) + Math.abs(point2Y - point1Y);
-  //console.log(result);
-  return result;
-}
-
-function goRight(point, distance, wire) {
-  //console.log(`go right ${distance}`)
-
-  for(let i = 1; i <= distance; i++) {
-    wire.push({ x: point.x + i, y: point.y, steps: point.steps + i })
-  }
-}
-
-function goUp(point, distance, wire) {
-  //console.log(`go up ${distance}`)
-
-  for(let i = 1; i <= distance; i++) {
-    wire.push({ x: point.x, y: point.y - i, steps: point.steps + i })
-  }
-
-}
-
-function goLeft(point, distance, wire) {
-  //console.log(`go left ${distance}`)
-
-  for(let i = 1; i <= distance; i++) {
-    wire.push({ x: point.x - i, y: point.y, steps: point.steps + i })
-  }
-}
-
-function goDown(point, distance, wire) {
-  //console.log(`go down ${distance}`)
-
-  for(let i = 1; i <= distance; i++) {
-    wire.push({ x: point.x, y: point.y + i, steps: point.steps + i })
-  }
-}
-
-function traceWire(path, wire) {
-  let point = { x: 0, y: 0, steps: 0 };
-
-  path.split(',').forEach(function(path) {
-    //console.log(path)
-    let direction = path[0]
-    let distance = parseInt(path.split(direction)[1])
-
-    if(direction === "R") {
-
-      goRight(point, distance, wire)
-    } else if(direction === "L") {
-
-      goLeft(point, distance, wire)
-    } else if(direction === "U") {
-
-      goUp(point, distance, wire)
-    } else if(direction === "D") {
-
-      goDown(point, distance, wire)
-    }
-
-    point = wire[wire.length - 1]
-    //console.log(wire)
-  })
+  return Math.abs(point2X - point1X) + Math.abs(point2Y - point1Y);
 }
 
 function initWires() {
+  let wireOne = new Map();
+  let wireTwo = new Map();
+
   let wires = fs.readFileSync("./day-03/input.txt", 'utf-8').split(require('os').EOL)
   //let wires = fs.readFileSync("./day-03/test.txt", 'utf-8').split(require('os').EOL)
   
-  //let point = { x: 0, y: 0 };
+  let move = {
+    "R": {x: 1, y: 0},
+    "L": {x: -1, y: 0},
+    "D": {x: 0, y: 1},
+    "U": {x: 0, y: -1}
+  }
 
-  traceWire(wires[0], wireOne)
-  traceWire(wires[1], wireTwo)
+  let point = { x: 0, y: 0 };
+  let steps = 0;
 
-  //console.log(wires[0])
- // console.log(wireOne)
-  //return program;
-}
+  wires[0].split(',').forEach(function(movement) {
+    let direction = movement[0]
+    let distance = parseInt(movement.split(direction)[1])
 
-// function findCrosses() {
-//   wireOne.forEach(function(one) {
-//     let result = wireTwo.find(function(two) {
-//       return (one.x === two.x) && (one.y === two.y)
-//     });
-//     if(result !== undefined) {
-//       wireCross.push(result)
-//     }
-//   })
-// }
+    for(let i = 0; i < distance; i++) {
+      let newPoint = {
+        x: point.x + move[direction].x,
+        y: point.y += move[direction].y }
 
-function part1() {
-  initWires();
-  // findCrosses();
-  wireOne.forEach(function(one) {
-    let result = wireTwo.find(function(two) {
-      return (one.x === two.x) && (one.y === two.y)
-    });
-    if(result !== undefined) {
-      wireCross.push(result)
+      steps += 1;
+      wireOne.set(`${newPoint.x},${newPoint.y}`, steps);
+      point.x = newPoint.x;
+      point.y = newPoint.y;
     }
   })
 
-  //console.log(wireCross)
+  point = { x: 0, y: 0 };
+  steps = 0;
 
-  let answer = wireCross.reduce((shortest, point) => {
-    let distance = getDistance(point.x, point.y, 0, 0);
-    if(distance < shortest) {
-      shortest = distance;
+  wires[1].split(',').forEach(function(movement) {
+    let direction = movement[0]
+    let distance = parseInt(movement.split(direction)[1])
+
+    for(let i = 0; i < distance; i++) {
+      let newPoint = {
+        x: point.x + move[direction].x,
+        y: point.y += move[direction].y }
+
+      steps += 1;
+      wireTwo.set(`${newPoint.x},${newPoint.y}`, steps);
+      point = newPoint;
     }
-    return shortest;
-  }, 100000000);
+  })
 
+  return {wireOne, wireTwo};
+}
 
-  return answer;
+function part1() {
+  const {wireOne, wireTwo} = initWires();
+  let _intersection = [];
+
+  for (var key of wireOne.keys()) {
+    if(wireTwo.has(key)) {
+      let point = key.split(',')
+      _intersection.push(getDistance(point[0], point[1], 0, 0));
+    }
+  }
+
+  return Math.min(..._intersection);
 }
 
 function part2() {
-  initWires();
-//console.log(wireOne)
-  let crossSteps = []
+  const {wireOne, wireTwo} = initWires();
+  let _intersection = [];
 
-  wireOne.forEach(function(one) {
-    let result = wireTwo.findIndex(function(two) {
-      
-      return (one.x === two.x) && (one.y === two.y)
-    });
-    if(result !== -1) {
-      crossSteps.push(one.steps + wireTwo[result].steps)
+  for (var key of wireOne.keys()) {
+    if(wireTwo.has(key)) {
+      _intersection.push(wireOne.get(key) + wireTwo.get(key));
     }
-  })
+  }
   
-  //console.log(crossSteps)
-
-  let answer = crossSteps.reduce((shortest, steps) => {
-    
-    if(steps < shortest) {
-      shortest = steps;
-    }
-    return shortest;
-  }, 100000000);
-
-  return answer;
+  return Math.min(..._intersection);
 }
 
 exports.run = function run() {
-  //let start = performance.now();
-  //results.part1.answer = part1();
-  //results.part1.time = (performance.now() - start).toFixed(2);
+  
+  let start = performance.now();
+  results.part1.answer = part1();
+  results.part1.time = (performance.now() - start).toFixed(2);
 
   start = performance.now();
   results.part2.answer = part2();
