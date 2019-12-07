@@ -21,7 +21,7 @@ function resetInstruction(newAddress) {
     parameterOne: {mode: "", value: ""},
     parameterTwo: {mode: "", value: ""},
     parameterThree: {mode: "", value: ""},
-    addressIncrement: 0,
+    nextAddress: 0,
     process: null,
   };
 };
@@ -51,7 +51,7 @@ function inputInstruction(address) {
 // Returns a high order function so it can be invoked later
 function outputInstruction(address) {
   return function() {
-    outputs.push(memory[address]);
+    outputs.push(memory[memory[address+1]]);
   };
 }
 
@@ -126,6 +126,7 @@ function finalizeInstruction() {
 decodeInstruction = function decodeInstruction() {
   const header = memory[instruction.address];
   console.log(`header: ${header}`);
+  console.log(`11: ${memory[11]}`);
   instruction.opcode = decodeOpcode(header);
   instruction.nextAddress = instruction.address + addressIncrementLookup[instruction.opcode];
   const {param1, param2, param3} = decodeParameterModes(header);
