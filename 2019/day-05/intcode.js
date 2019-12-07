@@ -44,14 +44,15 @@ function multiplyInstruction(parameterOne, parameterTwo, address) {
 
 function inputInstruction(address) {
   return function() {
-    memory[memory[address+1]] = input;
+    console.log(memory[address])
+    memory[memory[address]] = input;
   };
 }
 
 // Returns a high order function so it can be invoked later
-function outputInstruction(address) {
+function outputInstruction(parameterOne) {
   return function() {
-    outputs.push(memory[memory[address+1]]);
+    outputs.push(parameterOne);
   };
 }
 
@@ -90,6 +91,10 @@ function decodeParameterModes(header) {
 }
 exports.decodeParameterModes = decodeParameterModes;
 
+function getParameterValue(mode, address) {
+  return (mode === "IMMEDIATE") ? parseInt(memory[address]) : parseInt(memory[memory[address]]);
+}
+
 
 function finalizeInstruction() {
 
@@ -97,22 +102,23 @@ function finalizeInstruction() {
 
   switch(instruction.opcode) {
     case "ADD":
-      instruction.parameterOne.value = (instruction.parameterOne.mode === "IMMEDIATE") ? parseInt(memory[instruction.address+1]) : parseInt(memory[memory[instruction.address+1]]);
-      instruction.parameterTwo.value = (instruction.parameterTwo.mode === "IMMEDIATE") ? parseInt(memory[instruction.address+2]) : parseInt(memory[memory[instruction.address+2]]);
+      instruction.parameterOne.value = getParameterValue(instruction.parameterOne.mode, instruction.address+1);
+      instruction.parameterTwo.value = getParameterValue(instruction.parameterTwo.mode, instruction.address+2);
       instruction.parameterThree.value = parseInt(memory[instruction.address+3]);
       result = addInstruction(instruction.parameterOne.value, instruction.parameterTwo.value, instruction.parameterThree.value);
       break;
     case "MULTIPLY":
-      instruction.parameterOne.value = (instruction.parameterOne.mode === "IMMEDIATE") ? parseInt(memory[instruction.address+1]) : parseInt(memory[memory[instruction.address+1]]);
-      instruction.parameterTwo.value = (instruction.parameterTwo.mode === "IMMEDIATE") ? parseInt(memory[instruction.address+2]) : parseInt(memory[memory[instruction.address+2]]);
+      instruction.parameterOne.value = getParameterValue(instruction.parameterOne.mode, instruction.address+1);
+      instruction.parameterTwo.value = getParameterValue(instruction.parameterTwo.mode, instruction.address+2);
       instruction.parameterThree.value = parseInt(memory[instruction.address+3]);
       result = multiplyInstruction(instruction.parameterOne.value, instruction.parameterTwo.value, instruction.parameterThree.value);
       break;
     case "INPUT":
-      result = inputInstruction(instruction.address);
+      result = inputInstruction(instruction.address+1);
       break;
     case "OUTPUT":
-      result = outputInstruction(instruction.address);
+      instruction.parameterOne.value = getParameterValue(instruction.parameterOne.mode, instruction.address+1);
+      result = outputInstruction(instruction.parameterOne.value);
       break;
     case"HALT":
       break;
@@ -125,8 +131,8 @@ function finalizeInstruction() {
 
 decodeInstruction = function decodeInstruction() {
   const header = memory[instruction.address];
-  console.log(`header: ${header}`);
-  console.log(`11: ${memory[11]}`);
+  //console.log(`header: ${header}`);
+  //console.log(`11: ${memory[11]}`);
   instruction.opcode = decodeOpcode(header);
   instruction.nextAddress = instruction.address + addressIncrementLookup[instruction.opcode];
   const {param1, param2, param3} = decodeParameterModes(header);
