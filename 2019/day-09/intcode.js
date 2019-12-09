@@ -85,7 +85,8 @@ function multiplyInstruction(parameterOne, parameterTwo, address) {
 
 function inputInstruction(address) {
   return function() {
-    memory[memory[address]] = input;
+    memory[address] = input;
+    //memory[memory[address]] = input;
   };
 }
 
@@ -188,6 +189,10 @@ function getParameterValue(mode, address) {
     case POSITION:
       return parseInt(memory[memory[address]]);
     case RELATIVE:
+      // console.log(`address: ${address}`)
+      // console.log(`memory[address]: ${memory[address]}`)
+      // console.log(`memory[memory[address]]: ${memory[memory[address]]}`);
+      // console.log(`relativeBase ${relativeBase}`)
       return memory[parseInt(memory[address]) + relativeBase];
   }
   //return (mode === IMMEDIATE) ? parseInt(memory[address]) : parseInt(memory[memory[address]]);
@@ -230,7 +235,12 @@ function finalizeInstruction(header) {
                                    instruction.parameterThree.value);
       break;
     case INPUT:
-      result = inputInstruction(instruction.address+1);
+      console.log(`relativeBase: ${relativeBase}`)
+      console.log(`mem 26: ${memory[26]}`)
+      //decodeParameterOne(header);
+      //result = inputInstruction(instruction.parameterOne.value);
+      result = inputInstruction(parseInt(memory[instruction.address+1]) + relativeBase);
+      //result = inputInstruction(instruction.address+1);
       break;
     case OUTPUT:
       decodeParameterOne(header);
@@ -266,7 +276,9 @@ function finalizeInstruction(header) {
       break;
     case RELATIVE_BASE_OFFSET:
       decodeParameterOne(header);
+      //console.log(instruction)
       result = relativeBaseOffsetInstruction(instruction.parameterOne.value);
+      //result = relativeBaseOffsetInstruction(memory[instruction.address+1]);
       break;
     case HALT:
       break;
@@ -292,19 +304,20 @@ exports.run = function run(_memory, _input) {
   resetInstruction(0);
   decodeInstruction();
   //console.log(instruction)
+  let index = 0;
   while(instruction.opcode !== "HALT") {
-    //let index = 0;
-  //while(index < 85) {
+
+  //while(index < 2) {
     console.log(instruction)
     instruction.process();
     resetInstruction(instruction.nextAddress);
     decodeInstruction();
-    //index += 1;
+    index += 1;
     //console.log(instruction)
   }
   
 
-
+  console.log(`index: ${index}`)
   console.log(`Intcode Output: ${outputs}`)
   return outputs.toString();
 }
