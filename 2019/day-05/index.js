@@ -1,6 +1,9 @@
-// https://adventofcode.com/2019/day/4
+// https://adventofcode.com/2019/day/5
 
+const fs = require("fs");
 const { performance } = require("perf_hooks");
+
+const intcode = require("./intcode.js");
 
 let results = {
   title: "Day 05",
@@ -16,11 +19,14 @@ let results = {
 
 
 function part1() {
-  return 0;
+  let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
+  let result = intcode.run(_memory, 1);
+  return result.split(",").pop();
 }
 
 function part2() {
-  return 0;
+  let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
+  return intcode.run(_memory, 5);
 }
 
 exports.run = function run() {

@@ -270,6 +270,6 @@ exports.run = function run(_memory, _input) {
     decodeInstruction();
   }
   
-  console.log(`Intcode Output: ${outputs}`)
+  //console.log(`Intcode Output: ${outputs}`)
   return outputs.toString();
 }
