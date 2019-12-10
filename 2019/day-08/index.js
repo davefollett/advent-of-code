@@ -58,10 +58,56 @@ function part1(input, width, height) {
 }
 exports.part1 = part1;
 
-function part2(input) {
+function initImage(width, height) {
+  let image = new Array(height);
+  for(let i = 0; i < image.length; i++) {
+    image[i] = new Array(width).fill(-1);
+  }
+  return {width: width, height: height, render: image};
+}
 
-  let result = 0;
-  return result;
+function printImage(image) {
+  const width = image.width;
+  const height = image.height;
+  const render = image.render;
+
+  process.stdout.write("\n---START--IMAGE---\n");
+  for(let y = 0; y < height; y++) {
+    process.stdout.write(render[y] + '\n');
+  }
+  process.stdout.write("\x1b[0m---END--IMAGE---\n");
+}
+
+function addLayer(image, layer) {
+  const width = image.width;
+  const height = image.height;
+  const render = image.render;
+  const BgBlack = "\x1b[40m"
+  const BgWhite = "\x1b[47m"
+  color = {0: BgBlack, 1: BgWhite};
+
+  for(let i = 0; i < height; i++) {
+    row = layer.splice(0, width);
+    for(let k = 0; k < width; k++) {
+      if(row[k] !== '2') {
+        render[i][k] = color[row[k]];
+      }
+    }
+  }
+
+  return image;
+}
+
+function part2(input, width, height) {
+
+  let image = initImage(width, height);
+  let layers = decodeLayers(input, width, height);
+
+  while(layers.length !== 0){
+    image = addLayer(image, layers.pop());
+  }
+
+  printImage(image);
 }
 exports.part2 = part2;
 
@@ -74,8 +120,9 @@ exports.run = function run() {
 
   start = performance.now();
   input = fs.readFileSync("./day-08/input.txt", 'utf-8');
-  results.part2.answer = part2(input);
+  part2(input, 25, 6);
+  results.part2.answer = "CJZHR (in console)";
   results.part2.time = (performance.now() - start).toFixed(2);
 
   return results;
-};
+}

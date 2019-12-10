@@ -17,14 +17,13 @@ test('Part 1 run(REAL)', () => {
   expect(day08.part1(input,25,6)).toBe(2159);
 });
 
-// test('Part 2 run(TEST)', () => {
+test('Part 2 run(TEST)', () => {
+  let input = "0222112222120000";
+  day08.part2(input,2,2);
+});
 
-//   let input = fs.readFileSync("./day-06/test2.txt", 'utf-8');
-//   expect(day06.part2(input)).toBe(4);
-// });
-
-// test('Part 2 run(REAL)', () => {
-
-//   let input = fs.readFileSync("./day-06/input.txt", 'utf-8');
-//   expect(day06.part2(input)).toBe(346);
-// });
+// Look in console should be CJZHR
+test('Part 2 run(REAL)', () => {
+  let input = fs.readFileSync("./day-08/input.txt", 'utf-8');
+  day08.part2(input, 25, 6);
+});
