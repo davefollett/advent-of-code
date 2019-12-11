@@ -39,8 +39,29 @@ exports.IMMEDIATE = IMMEDIATE;
 let input = -1;
 let outputs = [];
 
-let memory = [];
+//let memory = [];
+//exports.memory = memory;
+
+let memory = {
+  
+  _memory:  [],
+
+  init(csvMemory) {
+    _memory = csvMemory.split(",").map(number => {
+      return parseInt(number);
+    });
+  },
+
+  at(address) {
+    return _memory[address];
+  },
+
+  set(address, value) {
+    _memory[address] = value;
+  }
+};
 exports.memory = memory;
+
 
 let instruction = {};
 exports.instruction = instruction;
@@ -60,56 +81,65 @@ function resetInstruction(newAddress) {
   };
 };
 
-function initMemory(_memory) {
-  memory = _memory.split(',');
-}
+// function initMemory(_memory) {
+//   memory = _memory.split(',');
+// }
 
 function addInstruction(parameterOne, parameterTwo, address) {
   return function() {
-    memory[address] = parameterOne + parameterTwo;
+    //memory[address] = parameterOne + parameterTwo;
+    memory.set(address, (memory.at(parameterOne) + memory.at(parameterTwo)));
   };
 }
 
 function multiplyInstruction(parameterOne, parameterTwo, address) {
   return function() {
-    memory[address] = parameterOne * parameterTwo;
+    //memory[address] = parameterOne * parameterTwo;
+    memory.set(address, (memory.at(parameterOne) * memory.at(parameterTwo)));
   };
 }
 
 function inputInstruction(address) {
   return function() {
-    memory[memory[address]] = input;
+    //memory[memory[address]] = input;
+    //memory[memory[address]] = input;
+    memory.set(memory.at(address), input);
   };
 }
 
 // Returns a high order function so it can be invoked later
 function outputInstruction(parameterOne) {
   return function() {
-    outputs.push(parameterOne);
+    outputs.push(memory.at(parameterOne));
+    //outputs.push(parameterOne);
   };
 }
 
 function jumpIfTrueInstruction(parameterOne, parameterTwo) {
   return function() {
-    instruction.nextAddress = (parameterOne !== 0) ? parameterTwo : instruction.nextAddress;
+    instruction.nextAddress =
+      (memory.at(parameterOne) !== 0) ? memory.at(parameterTwo) : instruction.nextAddress;
   }
 }
 
 function jumpIfFalseInstruction(parameterOne, parameterTwo) {
   return function() {
-    instruction.nextAddress = (parameterOne === 0) ? parameterTwo : instruction.nextAddress;
+    instruction.nextAddress =
+      (memory.at(parameterOne) === 0) ? memory.at(parameterTwo) : instruction.nextAddress;
   }
 }
 
 function lessThanInstruction(parameterOne, parameterTwo, address) {
   return function() {
-    memory[address] = (parameterOne < parameterTwo) ? 1 : 0;
+    //memory[address] = (parameterOne < parameterTwo) ? 1 : 0;
+    memory.set(address, (memory.at(parameterOne) < memory.at(parameterTwo)) ? 1 : 0);
   };
 }
 
 function equalsInstruction(parameterOne, parameterTwo, address) {
   return function() {
-    memory[address] = (parameterOne === parameterTwo) ? 1 : 0;
+    //memory[address] = (parameterOne === parameterTwo) ? 1 : 0;
+    memory.set(address, (memory.at(parameterOne) === memory.at(parameterTwo)) ? 1 : 0);
   };
 }
 
@@ -164,8 +194,9 @@ function decodeParameterModeThree(header) {
 exports.decodeParameterModeThree = decodeParameterModeThree;
 
 
-function getParameterValue(mode, address) {
-  return (mode === IMMEDIATE) ? parseInt(memory[address]) : parseInt(memory[memory[address]]);
+function getParameterValue(mode, parameterAddress) {
+  return (mode === IMMEDIATE) ? parameterAddress : memory.at(parameterAddress);
+  //return (mode === IMMEDIATE) ? parseInt(memory[address]) : parseInt(memory[memory[address]]);
 }
 
 function decodeParameterOne(header) {
@@ -180,7 +211,7 @@ function decodeParameterTwo(header) {
 
 function decodeParameterThree(header) {
   instruction.parameterThree.mode = decodeParameterModeThree(header);
-  instruction.parameterThree.value = parseInt(memory[instruction.address+3]);
+  instruction.parameterThree.value = getParameterValue("POSITION", instruction.address+3);
 }
 
 function finalizeInstruction(header) {
@@ -249,7 +280,7 @@ function finalizeInstruction(header) {
 }
 
 decodeInstruction = function decodeInstruction() {
-  const header = memory[instruction.address];
+  const header = memory.at(instruction.address);
   instruction.opcode = decodeOpcode(header);
   instruction.nextAddress = instruction.address + addressIncrementLookup[instruction.opcode];
   finalizeInstruction(header);
@@ -259,12 +290,12 @@ exports.decodeInstruction = decodeInstruction;
 exports.run = function run(_memory, _input) {
   outputs = [];
   input = _input;
-  initMemory(_memory);
+  memory.init(_memory);
   resetInstruction(0);
   decodeInstruction();
   
   while(instruction.opcode !== "HALT") {
-    //console.log(instruction)
+    console.log(instruction)
     instruction.process();
     resetInstruction(instruction.nextAddress);
     decodeInstruction();
