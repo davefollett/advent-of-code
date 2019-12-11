@@ -105,19 +105,35 @@ test.each`
   ${10100}  | ${intcode.IMMEDIATE}
   ${110100} | ${intcode.IMMEDIATE}
   ${101100} | ${intcode.POSITION}
+  ${3}      | ${intcode.POSITION}
 `('decodeParameterModeThree()', ({header, expected}) => {
   expect(intcode.decodeParameterModeThree(header)).toBe(expected);
 });
 
-test('Part 1 run(REAL)', () => {
+test('Memory At', () => {
+  let _memory = "0,1,2,3,4,5,6,7,8,16225258]";
+  intcode.memory.init(_memory);
+  expect(intcode.memory.at(1)).toBe(1);
+  expect(intcode.memory.at(9)).toBe(16225258);
+  expect(intcode.memory.at(200)).toBe(undefined);
+});
 
+test('Memory Set', () => {
+  let _memory = "0,1,2,3,4,5,6,7,8,16225258]";
+  intcode.memory.init(_memory);
+  intcode.memory.set(1,12);
+  intcode.memory.set(0,-1);
+  expect(intcode.memory.at(1)).toBe(12);
+  expect(intcode.memory.at(0)).toBe(-1);
+});
+
+test('Part 1 run(REAL)', () => {
   let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
   const expected = [0,0,0,0,0,0,0,0,0,16225258].toString();
   expect(intcode.run(_memory, 1)).toBe(expected);
 });
 
 test('Part 2 run(REAL)', () => {
-
   let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
   const expected = "2808771";
   expect(intcode.run(_memory, 5)).toBe(expected);
