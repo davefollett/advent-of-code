@@ -1,5 +1,8 @@
-const readline = require("readline");
 const fs = require("fs");
+
+let DEBUG_ON = false;
+
+function debug(output) { if(DEBUG_ON) {console.log(output);} }
 
 // OPCODES //
 const ADD = "ADD";
@@ -44,6 +47,7 @@ exports.RELATIVE = RELATIVE;
 
 let input = -1;
 let outputs = [];
+let relativeBase = 0;
 
 let memory = {
   
@@ -53,6 +57,9 @@ let memory = {
     _memory = csvMemory.split(",").map(number => {
       return parseInt(number);
     });
+    for(let i = 0; i<1000; i++) {
+      _memory.push(0);
+    }
   },
 
   at(address) {
@@ -96,7 +103,8 @@ function multiplyInstruction(p1Address, p2Address, p3Address) {
 
 function inputInstruction(p1Address) {
   return function() {
-    memory.set(memory.at(p1Address), input);
+    debug(`INPUT: ${p1Address}`)
+    memory.set(p1Address, input);
   };
 }
 
@@ -130,6 +138,12 @@ function lessThanInstruction(p1Address, p2Address, p3Address) {
 function equalsInstruction(p1Address, p2Address, p3Address) {
   return function() {
     memory.set(p3Address, (memory.at(p1Address) === memory.at(p2Address)) ? 1 : 0);
+  };
+}
+
+function relativeBaseOffsetInstruction(p1Address) {
+  return function() {
+    relativeBase += memory.at(p1Address);
   };
 }
 
@@ -186,9 +200,22 @@ function decodeParameterModeThree(header) {
 }
 exports.decodeParameterModeThree = decodeParameterModeThree;
 
-
 function getParameterAddress(mode, parameterAddress) {
-  return (mode === IMMEDIATE) ? parameterAddress : memory.at(parameterAddress);
+  let result = 0;
+  switch(mode) {
+  case IMMEDIATE:
+    result = parameterAddress;
+    break;
+  case POSITION:
+    result = memory.at(parameterAddress);
+    break;
+  case RELATIVE:
+    result = memory.at(parameterAddress) + relativeBase;
+    break;
+  default:
+    console.log(`Invalid mode: ${mode}`);
+  }
+  return result;
 }
 
 function decodeParameterOne(header) {
@@ -231,7 +258,8 @@ function finalizeInstruction(header) {
                                    instruction.parameterThree.address);
       break;
     case INPUT:
-      result = inputInstruction(instruction.address+1);
+      decodeParameterOne(header);
+      result = inputInstruction(instruction.parameterOne.address);
       break;
     case OUTPUT:
       decodeParameterOne(header);
@@ -265,6 +293,9 @@ function finalizeInstruction(header) {
                                  instruction.parameterTwo.address,
                                  instruction.parameterThree.address);
       break;
+    case RELATIVE_BASE_OFFSET:
+      decodeParameterOne(header);
+      result = relativeBaseOffsetInstruction(instruction.parameterOne.address);
     case HALT:
       break;
     default:
@@ -282,7 +313,9 @@ decodeInstruction = function decodeInstruction() {
 }
 exports.decodeInstruction = decodeInstruction;
 
-exports.run = function run(_memory, _input) {
+exports.run = function run(_memory, _input, debugFlag=false) {
+  DEBUG_ON = debugFlag;
+  relativeBase = 0;
   outputs = [];
   input = _input;
   memory.init(_memory);
@@ -290,12 +323,12 @@ exports.run = function run(_memory, _input) {
   decodeInstruction();
   
   while(instruction.opcode !== "HALT") {
-    //console.log(instruction)
+    debug(instruction);
     instruction.process();
     resetInstruction(instruction.nextAddress);
     decodeInstruction();
   }
   
-  //console.log(`Intcode Output: ${outputs}`)
+  debug(`Intcode Output: ${outputs}`)
   return outputs.toString();
 }

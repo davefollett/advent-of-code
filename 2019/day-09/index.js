@@ -6,7 +6,7 @@ const { performance } = require("perf_hooks");
 const intcode = require("./intcode.js");
 
 let results = {
-  title: "Day 05",
+  title: "Day 09",
   part1: {
     answer: "TBD",
     time: 0
@@ -19,14 +19,14 @@ let results = {
 
 
 function part1() {
-  let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
+  let _memory = fs.readFileSync("./day-09/input.txt", 'utf-8');
   let result = intcode.run(_memory, 1);
   return result.split(",").pop();
 }
 
 function part2() {
-  let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
-  return intcode.run(_memory, 5);
+  let _memory = fs.readFileSync("./day-09/input.txt", 'utf-8');
+  return intcode.run(_memory, 2);
 }
 
 exports.run = function run() {

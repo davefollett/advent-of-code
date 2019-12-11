@@ -6,6 +6,7 @@ const day04 = require("./day-04");
 const day05 = require("./day-05");
 const day06 = require("./day-06");
 const day08 = require("./day-08");
+const day09 = require("./day-09");
 
 const PORT = 8080;
 
@@ -63,6 +64,11 @@ app.get("/day-06", (req, res) => {
 
 app.get("/day-08", (req, res) => {
   const results = day08.run();
+  res.send(template(formatResult(results)));
+});
+
+app.get("/day-09", (req, res) => {
+  const results = day09.run();
   res.send(template(formatResult(results)));
 });
 
@@ -142,6 +148,7 @@ let template = body => `
             <a class="link" href="/day-05">Day 05</a>
             <a class="link" href="/day-06">Day 06</a>
             <a class="link" href="/day-08">Day 08</a>
+            <a class="link" href="/day-09">Day 09</a>
           </div>
         </aside>
       

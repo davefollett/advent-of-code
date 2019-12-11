@@ -129,7 +129,7 @@ test('Memory At', () => {
   intcode.memory.init(_memory);
   expect(intcode.memory.at(1)).toBe(1);
   expect(intcode.memory.at(9)).toBe(16225258);
-  expect(intcode.memory.at(200)).toBe(undefined);
+  expect(intcode.memory.at(200000)).toBe(undefined);
 });
 
 test('Memory Set', () => {
@@ -141,15 +141,45 @@ test('Memory Set', () => {
   expect(intcode.memory.at(0)).toBe(-1);
 });
 
-test('Part 1 run(REAL)', () => {
+test('Day 5 Part 1 run(REAL)', () => {
   let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
   const expected = [0,0,0,0,0,0,0,0,0,16225258].toString();
   expect(intcode.run(_memory, 1)).toBe(expected);
 });
 
-test('Part 2 run(REAL)', () => {
+test('Day 5 Part 2 run(REAL)', () => {
   let _memory = fs.readFileSync("./day-05/input.txt", 'utf-8');
   const expected = "2808771";
   expect(intcode.run(_memory, 5)).toBe(expected);
 });
 
+test('Day 9 Part 1 run(TEST 1)', () => {
+  let _memory = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99";
+  expect(intcode.run(_memory, 1)).toBe("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99");
+});
+
+test('Day 9 Part 1 run(TEST 2)', () => {
+  let _memory = "104,1125899906842624,99"
+  
+  expect(intcode.run(_memory, 1)).toBe("1125899906842624");
+});
+
+test('Part 1 run(TEST 3)', () => {
+  let _memory = "1102,34915192,34915192,7,4,7,99,0";
+  expect(intcode.run(_memory, 1)).toBe("1219070632396864");
+});
+
+test('Day 9 Part 1 run(RELATIVE INPUT)', () => {
+  let _memory = "109,1,203,0,4,1,99";
+  intcode.run(_memory, 15);
+});
+
+test('Day 9 Part 1 run(REAL)', () => {
+  let _memory = fs.readFileSync("./day-09/input.txt", 'utf-8');
+  expect(intcode.run(_memory, 1)).toBe("2789104029");
+});
+
+test('Day 9 Part 2 run(REAL)', () => {
+  let _memory = fs.readFileSync("./day-09/input.txt", 'utf-8');
+  expect(intcode.run(_memory, 2)).toBe("32869");
+});
