@@ -105,6 +105,7 @@ test.each`
   ${10100}  | ${intcode.IMMEDIATE}
   ${110100} | ${intcode.IMMEDIATE}
   ${101100} | ${intcode.POSITION}
+  ${3}      | ${intcode.POSITION}
 `('decodeParameterModeThree()', ({header, expected}) => {
   expect(intcode.decodeParameterModeThree(header)).toBe(expected);
 });
@@ -126,13 +127,11 @@ test('Memory Set', () => {
   expect(intcode.memory.at(0)).toBe(-1);
 });
 
-
 test('Part 1 run(REAL)', () => {
   let _memory = fs.readFileSync("./day-31/input.txt", 'utf-8');
   const expected = [0,0,0,0,0,0,0,0,0,16225258].toString();
   expect(intcode.run(_memory, 1)).toBe(expected);
 });
-
 
 test('Part 2 run(REAL)', () => {
   let _memory = fs.readFileSync("./day-31/input.txt", 'utf-8');

@@ -39,9 +39,6 @@ exports.IMMEDIATE = IMMEDIATE;
 let input = -1;
 let outputs = [];
 
-//let memory = [];
-//exports.memory = memory;
-
 let memory = {
   
   _memory:  [],
@@ -66,80 +63,67 @@ exports.memory = memory;
 let instruction = {};
 exports.instruction = instruction;
 
-const nullParameter = {mode: "", value: ""};
-
 function resetInstruction(newAddress) {
   
   instruction = { 
     address: newAddress,
     opcode: null,
-    parameterOne: {mode: "", value: ""},
-    parameterTwo: {mode: "", value: ""},
-    parameterThree: {mode: "", value: ""},
+    parameterOne: {mode: "", address: ""},
+    parameterTwo: {mode: "", address: ""},
+    parameterThree: {mode: "", address: ""},
     nextAddress: 0,
     process: null,
   };
 };
 
-// function initMemory(_memory) {
-//   memory = _memory.split(',');
-// }
-
-function addInstruction(parameterOne, parameterTwo, address) {
+function addInstruction(p1Address, p2Address, p3Address) {
   return function() {
-    //memory[address] = parameterOne + parameterTwo;
-    memory.set(address, (memory.at(parameterOne) + memory.at(parameterTwo)));
+    memory.set(p3Address, (memory.at(p1Address) + memory.at(p2Address)));
   };
 }
 
-function multiplyInstruction(parameterOne, parameterTwo, address) {
+function multiplyInstruction(p1Address, p2Address, p3Address) {
   return function() {
-    //memory[address] = parameterOne * parameterTwo;
-    memory.set(address, (memory.at(parameterOne) * memory.at(parameterTwo)));
+    memory.set(p3Address, (memory.at(p1Address) * memory.at(p2Address)));
   };
 }
 
-function inputInstruction(address) {
+function inputInstruction(p1Address) {
   return function() {
-    //memory[memory[address]] = input;
-    //memory[memory[address]] = input;
-    memory.set(memory.at(address), input);
+    memory.set(memory.at(p1Address), input);
   };
 }
 
 // Returns a high order function so it can be invoked later
-function outputInstruction(parameterOne) {
+function outputInstruction(p1Address) {
   return function() {
-    outputs.push(memory.at(parameterOne));
-    //outputs.push(parameterOne);
+    outputs.push(memory.at(p1Address));
   };
 }
 
-function jumpIfTrueInstruction(parameterOne, parameterTwo) {
+function jumpIfTrueInstruction(p1Address, p2Address) {
   return function() {
     instruction.nextAddress =
-      (memory.at(parameterOne) !== 0) ? memory.at(parameterTwo) : instruction.nextAddress;
+      (memory.at(p1Address) !== 0) ? memory.at(p2Address) : instruction.nextAddress;
   }
 }
 
-function jumpIfFalseInstruction(parameterOne, parameterTwo) {
+function jumpIfFalseInstruction(p1Address, p2Address) {
   return function() {
     instruction.nextAddress =
-      (memory.at(parameterOne) === 0) ? memory.at(parameterTwo) : instruction.nextAddress;
+      (memory.at(p1Address) === 0) ? memory.at(p2Address) : instruction.nextAddress;
   }
 }
 
-function lessThanInstruction(parameterOne, parameterTwo, address) {
+function lessThanInstruction(p1Address, p2Address, p3Address) {
   return function() {
-    //memory[address] = (parameterOne < parameterTwo) ? 1 : 0;
-    memory.set(address, (memory.at(parameterOne) < memory.at(parameterTwo)) ? 1 : 0);
+    memory.set(p3Address, (memory.at(p1Address) < memory.at(p2Address)) ? 1 : 0);
   };
 }
 
-function equalsInstruction(parameterOne, parameterTwo, address) {
+function equalsInstruction(p1Address, p2Address, p3Address) {
   return function() {
-    //memory[address] = (parameterOne === parameterTwo) ? 1 : 0;
-    memory.set(address, (memory.at(parameterOne) === memory.at(parameterTwo)) ? 1 : 0);
+    memory.set(p3Address, (memory.at(p1Address) === memory.at(p2Address)) ? 1 : 0);
   };
 }
 
@@ -194,24 +178,26 @@ function decodeParameterModeThree(header) {
 exports.decodeParameterModeThree = decodeParameterModeThree;
 
 
-function getParameterValue(mode, parameterAddress) {
+function getParameterAddress(mode, parameterAddress) {
   return (mode === IMMEDIATE) ? parameterAddress : memory.at(parameterAddress);
-  //return (mode === IMMEDIATE) ? parseInt(memory[address]) : parseInt(memory[memory[address]]);
 }
 
 function decodeParameterOne(header) {
   instruction.parameterOne.mode = decodeParameterModeOne(header);
-  instruction.parameterOne.value = getParameterValue(instruction.parameterOne.mode, instruction.address+1);
+  instruction.parameterOne.address =
+    getParameterAddress(instruction.parameterOne.mode, instruction.address+1);
 }
 
 function decodeParameterTwo(header) {
   instruction.parameterTwo.mode = decodeParameterModeTwo(header);
-  instruction.parameterTwo.value = getParameterValue(instruction.parameterTwo.mode, instruction.address+2);
+  instruction.parameterTwo.address =
+    getParameterAddress(instruction.parameterTwo.mode, instruction.address+2);
 }
 
 function decodeParameterThree(header) {
   instruction.parameterThree.mode = decodeParameterModeThree(header);
-  instruction.parameterThree.value = getParameterValue("POSITION", instruction.address+3);
+  instruction.parameterThree.address =
+    getParameterAddress(instruction.parameterThree.mode, instruction.address+3);
 }
 
 function finalizeInstruction(header) {
@@ -223,52 +209,52 @@ function finalizeInstruction(header) {
       decodeParameterOne(header);
       decodeParameterTwo(header);
       decodeParameterThree(header)
-      result = addInstruction(instruction.parameterOne.value,
-                              instruction.parameterTwo.value,
-                              instruction.parameterThree.value);
+      result = addInstruction(instruction.parameterOne.address,
+                              instruction.parameterTwo.address,
+                              instruction.parameterThree.address);
       break;
     case MULTIPLY:
       decodeParameterOne(header);
       decodeParameterTwo(header);
       decodeParameterThree(header)
-      result = multiplyInstruction(instruction.parameterOne.value,
-                                   instruction.parameterTwo.value,
-                                   instruction.parameterThree.value);
+      result = multiplyInstruction(instruction.parameterOne.address,
+                                   instruction.parameterTwo.address,
+                                   instruction.parameterThree.address);
       break;
     case INPUT:
       result = inputInstruction(instruction.address+1);
       break;
     case OUTPUT:
       decodeParameterOne(header);
-      result = outputInstruction(instruction.parameterOne.value);
+      result = outputInstruction(instruction.parameterOne.address);
       break;
     case JUMP_IF_TRUE:
       decodeParameterOne(header);
       decodeParameterTwo(header);
-      result = jumpIfTrueInstruction(instruction.parameterOne.value,
-                                     instruction.parameterTwo.value);
+      result = jumpIfTrueInstruction(instruction.parameterOne.address,
+                                     instruction.parameterTwo.address);
       break;
     case JUMP_IF_FALSE:
       decodeParameterOne(header);
       decodeParameterTwo(header);
-      result = jumpIfFalseInstruction(instruction.parameterOne.value,
-                                      instruction.parameterTwo.value);
+      result = jumpIfFalseInstruction(instruction.parameterOne.address,
+                                      instruction.parameterTwo.address);
       break;
     case LESS_THAN:
       decodeParameterOne(header);
       decodeParameterTwo(header);
       decodeParameterThree(header)
-      result = lessThanInstruction(instruction.parameterOne.value,
-                                   instruction.parameterTwo.value,
-                                   instruction.parameterThree.value);
+      result = lessThanInstruction(instruction.parameterOne.address,
+                                   instruction.parameterTwo.address,
+                                   instruction.parameterThree.address);
       break;
     case EQUALS:
       decodeParameterOne(header);
       decodeParameterTwo(header);
       decodeParameterThree(header)
-      result = equalsInstruction(instruction.parameterOne.value,
-                                 instruction.parameterTwo.value,
-                                 instruction.parameterThree.value);
+      result = equalsInstruction(instruction.parameterOne.address,
+                                 instruction.parameterTwo.address,
+                                 instruction.parameterThree.address);
       break;
     case HALT:
       break;
@@ -295,7 +281,7 @@ exports.run = function run(_memory, _input) {
   decodeInstruction();
   
   while(instruction.opcode !== "HALT") {
-    console.log(instruction)
+    //console.log(instruction)
     instruction.process();
     resetInstruction(instruction.nextAddress);
     decodeInstruction();
