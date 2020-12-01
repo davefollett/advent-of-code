@@ -1,0 +1,120 @@
+let express = require("express");
+const day01 = require("./day-01");
+
+const PORT = 8080;
+
+let app = express();
+app.use(express.static("assets"));
+
+function formatResult(result) {
+  return `
+    <h1>${result.title}</h1>
+    <ui>
+      <li>Part 1: ${result.part1.answer} (${result.part1.time} ms)</li>
+      <li>Part 2: ${result.part2.answer} (${result.part2.time} ms)</li>
+    <ui>
+  `;
+}
+
+app.get("/", (req, res) => {
+  res.send(
+    template(`
+    <h1>Welcome to Dave Follett's Advent of Code Solutions.</h1>
+    <p>Click each link in the sidebar to run each day's solution.</p>
+  `)
+  );
+});
+
+app.get("/day-01", (req, res) => {
+  const results = day01.run();
+  res.send(template(formatResult(results)));
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}...`);
+});
+
+let template = body => `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Dave Follett's 2020 Advent of Code</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+
+    <style>
+
+      html, body, pre, code, kbd, samp {
+        font-family: 'Press Start 2P', cursive;
+        background-color: #212529;
+      }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: 200px auto;
+        grid-gap: 1em;
+      }
+
+      header, footer {
+        grid-column: 1 / 3;
+      }
+
+      @media all and (max-width: 700px) {
+        aside,
+        main {
+          grid-column: 1 / 3;
+        }
+      }
+
+      body {
+        margin: 0 auto;
+        max-width: 56em;
+        padding: 1em 0;
+      }
+
+      header,
+      aside,
+      main,
+      footer {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .cell {
+        flex: 1;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="grid">
+        <header>
+          <div class="cell nes-container is-dark">
+            <h1>2020 Advent of Code</h1>
+          </div>
+        </header>
+      
+        <aside>
+          <div class="cell nes-container is-dark">
+            <a class="link" href="/">Home</a>
+            <a class="link" href="/day-01">Day 01</a>
+          </div>
+        </aside>
+      
+        <main>
+          <div class="cell nes-container is-dark">
+              <p >${body}</p>
+            </div>
+        </main>
+      
+        <footer>
+          <div class="cell nes-container is-dark">
+            <p>&copy; 2020 Dave Follett</p>
+          </div>
+        </footer>
+      </div>
+  </body>
+<html>
+`;

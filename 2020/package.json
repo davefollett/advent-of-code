@@ -1,0 +1,20 @@
+{
+  "name": "advent-of-code-2020",
+  "version": "0.0.1",
+  "description": "2020 Advent of Code",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "debug": "nodemon --inspect index.js",
+    "test": "jest --watch"
+  },
+  "author": "Dave Follett",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.1"
+  }
+}
