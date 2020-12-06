@@ -17,12 +17,47 @@ let results = {
 };
 
 function part1() {
-  return 0
+
+  let result = 0
+
+  const expenses = fs.readFileSync("./day-01/input.txt", 'utf-8')
+    .split(require('os').EOL)
+    .map(element => {
+      return parseInt(element)
+    })
+  
+  // O(n^2) yuck
+  for(let i = 0; i < expenses.length - 1; i++) {
+    for(let j = 1; j < expenses.length; j++) {
+      if( expenses[i] + expenses[j] === 2020) {
+        return expenses[i] * expenses[j]
+      }
+    }
+  }
+  
+  return result
 }
 
 function part2() {
+  let result = 0
 
-  return 0
+  const expenses = fs.readFileSync("./day-01/input.txt", 'utf-8')
+    .split(require('os').EOL)
+    .map(element => {
+      return parseInt(element)
+    })
+  
+  // O(n^3) yuck
+  for(let i = 0; i < expenses.length - 2; i++) {
+    for(let j = 1; j < expenses.length - 1; j++) {
+      for(let k = 2; k < expenses.length; k++) {
+        if( expenses[i] + expenses[j] + expenses[k] === 2020) {
+          return expenses[i] * expenses[j] * expenses[k]
+        }
+      }
+    }
+  }
+  return result
 }
 
 exports.run = function run() {
