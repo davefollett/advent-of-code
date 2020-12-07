@@ -28,12 +28,38 @@ function part1(input) {
 
   return result
 }
-
 exports.part1 = part1
+
 
 function part2(input) {
 
-  return 0
+  const result = fs.readFileSync(input, 'utf-8')
+    .split("\n\n")
+    .reduce(function(accumulator, answers) {
+
+      let answersArray = answers.split('\n')
+      let numPeople = answersArray.length
+
+      let answersCombined = {}
+      
+      answersArray.forEach(function(person) {
+        for(let i in person) {
+          if(answersCombined[person[i]]) {
+            answersCombined[person[i]] += 1
+          } else {
+            answersCombined[person[i]] = 1
+          }
+        }
+      })
+
+      for(let attribute in answersCombined) {
+        accumulator += (answersCombined[attribute] === numPeople) ? 1 : 0
+      }
+      
+      return accumulator
+    }, 0)
+
+  return result
 }
 exports.part2 = part2
 
@@ -41,7 +67,6 @@ exports.run = function run() {
 
   const input = "./day-06/input.txt"
   //const input = "./day-06/input-test.txt"
-
 
   let start = performance.now();
   results.part1.answer = part1(input);
