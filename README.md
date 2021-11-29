@@ -2,6 +2,18 @@
 
 Welcome to Dave Follett's Advent of Code Solutions.
 
+## 2021
+
+My 2021 Advent of Code solutions are implemented using [Rust](https://www.rust-lang.org/).  Use the following steps to setup and run the application:
+1. Install and setup Rust if you have not already.  Instructions can be found [here](https://www.rust-lang.org/learn/get-started)
+2. Change directory to 2021.
+
+   `cd 2021/`
+
+3. Build and run the application.
+
+   `cargo run`
+
 ## 2019
 
 My 2019 Advent of Code solutions are implemented using a node + express application.  Use the following steps to setup and run the application:
