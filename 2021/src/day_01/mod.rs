@@ -4,8 +4,20 @@ use std::path::Path;
 
 
 pub fn run() {
-  part_01();
-  part_02();
+
+  let mut depths: Vec<i32> = Vec::new();
+
+  if let Ok(lines) = read_lines("./src/day_01/input.txt") {
+      // Consumes the iterator, returns an (Optional) String
+      for line in lines {
+          if let Ok(depth) = line {
+              depths.push(depth.parse::<i32>().unwrap());
+          }
+      }
+  }
+
+  part_01(&depths);
+  part_02(&depths);
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -14,20 +26,10 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
-fn part_01() {
-  let mut depths = Vec::new();
-
-  if let Ok(lines) = read_lines("./src/day_01/input.txt") {
-      // Consumes the iterator, returns an (Optional) String
-      for line in lines {
-          if let Ok(depth) = line {
-              depths.push(depth.parse::<i32>().unwrap());
-          }
-      }
-  }
-
+fn part_01(depths: &Vec<i32>) {
   let mut prev = depths[0];
   let mut increasing_count = 0;
+
   for depth in depths.iter() {
       if prev < *depth {
           increasing_count += 1;
@@ -35,23 +37,13 @@ fn part_01() {
       prev = *depth
   }
 
-  println!("day 1 part 1: {}", increasing_count);
+  println!("day 01 part 01: {}", increasing_count);
 }
 
-fn part_02() {
-  let mut depths = Vec::new();
-
-  if let Ok(lines) = read_lines("./src/day_01/input.txt") {
-      // Consumes the iterator, returns an (Optional) String
-      for line in lines {
-          if let Ok(depth) = line {
-              depths.push(depth.parse::<i32>().unwrap());
-          }
-      }
-  }
-
+fn part_02(depths: &Vec<i32>) {
   let mut prev = depths[0] + depths[1] + depths[2];
   let mut increasing_count = 0;
+
   for (index, depth) in depths.iter().enumerate() {
       if index + 2 > depths.len() - 1 { break; }
 
@@ -61,5 +53,5 @@ fn part_02() {
       }
       prev = current;
   }
-  println!("day 1 part 2: {}", increasing_count);
+  println!("day 01 part 02: {}", increasing_count);
 }
