@@ -2,6 +2,16 @@
 
 Welcome to Dave Follett's Advent of Code Solutions.
 
+## 2022 - JavaScript
+
+My 2022 Advent of Code solutions are implemented using a node v16 + express application.  Use the following steps to setup and run the application:
+```
+cd 2022/javascript
+npm ci
+npm start
+```
+Navigate a browser to: http://localhost:8080
+
 ## 2021
 
 My 2021 Advent of Code solutions are implemented using [Rust](https://www.rust-lang.org/).  Use the following steps to setup and run the application:
