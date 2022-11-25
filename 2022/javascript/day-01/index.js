@@ -1,8 +1,11 @@
 // https://adventofcode.com/2022/day/1
 
-const readline = require("readline");
-const fs = require("fs");
-const { performance } = require("perf_hooks");
+// const readline = require("readline");
+// import * as readline from 'node:readline';
+// const fs = require("fs");
+// import * as fs from 'node:fs';
+// const { performance } = require("perf_hooks");
+import { performance } from 'node:perf_hooks';
 
 let results = {
   title: "Day 01",
@@ -18,18 +21,18 @@ let results = {
 
 function part1() {
 
-  let result = 0
+  let result = 0;
   
-  return result
+  return result;
 }
 
 function part2() {
-  let result = 0
+  let result = 0;
 
-  return result
+  return result;
 }
 
-exports.run = function run() {
+export function run() {
   let start = performance.now();
   results.part1.answer = part1();
   results.part1.time = (performance.now() - start).toFixed(2);
@@ -39,4 +42,4 @@ exports.run = function run() {
   results.part2.time = (performance.now() - start).toFixed(2);
 
   return results;
-};
+}

@@ -1,5 +1,7 @@
-let express = require("express");
-const day01 = require("./day-01");
+// let express = require("express");
+import express from 'express';
+import { run as day01Run } from './day-01/index.js';
+// const day01 = require("./day-01");
 // const day02 = require("./day-02");
 // const day03 = require("./day-03");
 // const day04 = require("./day-04");
@@ -31,7 +33,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/day-01", (req, res) => {
-  const results = day01.run();
+  const results = day01Run();
   res.send(template(formatResult(results)));
 });
 

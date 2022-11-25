@@ -3,8 +3,11 @@
 Welcome to Dave Follett's Advent of Code Solutions.
 
 ## 2022 - JavaScript
+![node version >=16.0.0 <17.0.0](https://img.shields.io/badge/node-%3E=16.0.0_%3C17.0.0-blue)
+![npm version >=8.0.0 <9.0.0](https://img.shields.io/badge/npm-%3E=8.0.0_%3C9.0.0-blue)
 
-My 2022 Advent of Code solutions are implemented using a node v16 + express application.  Use the following steps to setup and run the application:
+
+My 2022 Advent of Code solutions are implemented using an [Express](https://expressjs.com/) application.  Use the following steps to setup and run the application:
 ```
 cd 2022/javascript
 npm ci
