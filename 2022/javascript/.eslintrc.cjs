@@ -3,7 +3,7 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb-base",
     "overrides": [
     ],
     "parserOptions": {
@@ -11,6 +11,11 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "semi": ["error", "always"],
+        // https://github.com/airbnb/javascript/issues/2134#issuecomment-670779229
+        "import/extensions": [
+            "error",
+            "ignorePackages"
+        ],
+        "no-console": "off",
     }
 }

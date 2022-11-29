@@ -7,27 +7,26 @@
 // const { performance } = require("perf_hooks");
 import { performance } from 'node:perf_hooks';
 
-let results = {
-  title: "Day 01",
+const results = {
+  title: 'Day 01',
   part1: {
-    answer: "TBD",
-    time: 0
+    answer: 'TBD',
+    time: 0,
   },
   part2: {
-    answer: "TBD",
-    time: 0
-  }
+    answer: 'TBD',
+    time: 0,
+  },
 };
 
-function part1() {
+export function part1() {
+  const result = 0;
 
-  let result = 0;
-  
   return result;
 }
 
-function part2() {
-  let result = 0;
+export function part2() {
+  const result = 0;
 
   return result;
 }
