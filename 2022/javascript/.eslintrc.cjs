@@ -1,21 +1,21 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true
+    env: {
+        browser: true,
+        es2021: true,
     },
-    "extends": "airbnb-base",
-    "overrides": [
+    extends: 'airbnb-base',
+    overrides: [
     ],
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
+    parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
     },
-    "rules": {
+    rules: {
         // https://github.com/airbnb/javascript/issues/2134#issuecomment-670779229
-        "import/extensions": [
-            "error",
-            "ignorePackages"
+        'import/extensions': [
+            'error',
+            'ignorePackages'
         ],
-        "no-console": "off",
+        'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
     }
 }
