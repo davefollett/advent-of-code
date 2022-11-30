@@ -6,18 +6,7 @@
 // import * as fs from 'node:fs';
 // const { performance } = require("perf_hooks");
 import { performance } from 'node:perf_hooks';
-
-const results = {
-  title: 'Day 01',
-  part1: {
-    answer: 'TBD',
-    time: 0,
-  },
-  part2: {
-    answer: 'TBD',
-    time: 0,
-  },
-};
+import Result from '../utils/result.js';
 
 export function part1() {
   const result = 0;
@@ -32,6 +21,7 @@ export function part2() {
 }
 
 export function run() {
+  const results = new Result('Day 01');
   let start = performance.now();
   results.part1.answer = part1();
   results.part1.time = (performance.now() - start).toFixed(2);
