@@ -1,6 +1,6 @@
 // let express = require("express");
 import express from 'express';
-import template from './template.js';
+import template from './utils/template.js';
 import { run as day01Run } from './day-01/index.js';
 // const day01 = require("./day-01");
 // const day02 = require("./day-02");
