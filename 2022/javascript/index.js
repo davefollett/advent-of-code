@@ -2,12 +2,7 @@
 import express from 'express';
 import template from './utils/template.js';
 import { run as day01Run } from './day-01/index.js';
-// const day01 = require("./day-01");
-// const day02 = require("./day-02");
-// const day03 = require("./day-03");
-// const day04 = require("./day-04");
-// const day05 = require("./day-05");
-// const day06 = require("./day-06");
+import { run as day02Run } from './day-02/index.js';
 
 const PORT = 8080;
 
@@ -38,30 +33,10 @@ app.get('/day-01', (req, res) => {
   res.send(template(formatResult(results)));
 });
 
-// app.get("/day-02", (req, res) => {
-//   const results = day02.run();
-//   res.send(template(formatResult(results)));
-// });
-
-// app.get("/day-03", (req, res) => {
-//   const results = day03.run();
-//   res.send(template(formatResult(results)));
-// });
-
-// app.get("/day-04", (req, res) => {
-//   const results = day04.run();
-//   res.send(template(formatResult(results)));
-// });
-
-// app.get("/day-05", (req, res) => {
-//   const results = day05.run();
-//   res.send(template(formatResult(results)));
-// });
-
-// app.get("/day-06", (req, res) => {
-//   const results = day06.run();
-//   res.send(template(formatResult(results)));
-// });
+app.get('/day-02', (req, res) => {
+  const results = day02Run();
+  res.send(template(formatResult(results)));
+});
 
 app.listen(PORT, () => {
   console.info(`Listening on port ${PORT}...`);

@@ -65,6 +65,7 @@ export default function template(body) {
           <div class="cell nes-container is-dark">
             <a class="link" href="/">Home</a>
             <a class="link" href="/day-01">Day 01</a>
+            <a class="link" href="/day-02">Day 02</a>
           </div>
         </aside>
       
