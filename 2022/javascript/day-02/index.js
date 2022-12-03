@@ -4,43 +4,36 @@ import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
 import fileParser from '../utils/file-parser.js';
 
+const WIN = 6;
+const DRAW = 3;
+const LOSE = 0;
+
+const ROCK = 'ROCK';
+const PAPER = 'PAPER';
+const SCISSORS = 'SCISSORS';
+
+const THEM_LOOKUP = { A: ROCK, B: PAPER, C: SCISSORS };
+const ME_LOOKUP = { X: ROCK, Y: PAPER, Z: SCISSORS };
+const ME_TO_OUTCOME_LOOKUP = { X: 'LOSE', Y: 'DRAW', Z: 'WIN' };
+
+function scoreRound(them, me) {
+  const ME_CARD_POINTS_LOOKUP = { ROCK: 1, PAPER: 2, SCISSORS: 3 };
+
+  const RESULT_LOOKUP = {
+    ROCK: { ROCK: DRAW, PAPER: WIN, SCISSORS: LOSE },
+    PAPER: { ROCK: LOSE, PAPER: DRAW, SCISSORS: WIN },
+    SCISSORS: { ROCK: WIN, PAPER: LOSE, SCISSORS: DRAW },
+  };
+
+  return RESULT_LOOKUP[them][me] + ME_CARD_POINTS_LOOKUP[me];
+}
+
 function lineParserP1(line) {
-  const WIN = 6;
-  const TIE = 3;
-  const LOSE = 0;
-
-  const THEM_LOOKUP = {
-    A: 'Rock',
-    B: 'Paper',
-    C: 'Scissors',
-  };
-
-  const YOU_LOOKUP = {
-    X: 'Rock',
-    Y: 'Paper',
-    Z: 'Scissors',
-  };
-
-  const YOU_POINTS_LOOKUP = {
-    Rock: 1,
-    Paper: 2,
-    Scissors: 3,
-  };
-
-  let roundResult = LOSE;
   const round = line.split(' ');
   const them = THEM_LOOKUP[round[0]];
-  const you = YOU_LOOKUP[round[1]];
+  const me = ME_LOOKUP[round[1]];
 
-  if (them === you) {
-    roundResult = TIE;
-  } else if ((you === 'Rock' && them === 'Scissors')
-    || (you === 'Paper' && them === 'Rock')
-    || (you === 'Scissors' && them === 'Paper')) {
-    roundResult = WIN;
-  }
-
-  return YOU_POINTS_LOOKUP[you] + roundResult;
+  return scoreRound(them, me);
 }
 
 export function part1(filename) {
@@ -48,55 +41,23 @@ export function part1(filename) {
   return scoreLog.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 }
 
+function determineMe(them, outcome) {
+  const RESULT_LOOKUP = {
+    ROCK: { DRAW: ROCK, WIN: PAPER, LOSE: SCISSORS },
+    PAPER: { LOSE: ROCK, DRAW: PAPER, WIN: SCISSORS },
+    SCISSORS: { WIN: ROCK, LOSE: PAPER, DRAW: SCISSORS },
+  };
+
+  return RESULT_LOOKUP[them][outcome];
+}
+
 function lineParserP2(line) {
-  const WIN = 6;
-  const TIE = 3;
-  const LOSE = 0;
-
-  const THEM_LOOKUP = {
-    A: 'Rock',
-    B: 'Paper',
-    C: 'Scissors',
-  };
-
-  const YOU_POINTS_LOOKUP = {
-    Rock: 1,
-    Paper: 2,
-    Scissors: 3,
-  };
-
-  let roundResult = LOSE;
   const round = line.split(' ');
   const them = THEM_LOOKUP[round[0]];
-  let you = 'Dave';
+  const outcome = ME_TO_OUTCOME_LOOKUP[round[1]];
+  const me = determineMe(them, outcome);
 
-  const YOU_MODIFIED_LOOKUP = {
-    X: 'Lose',
-    Y: 'Tie',
-    Z: 'Win',
-  };
-
-  const desiredResult = YOU_MODIFIED_LOOKUP[round[1]];
-
-  if (them === 'Rock' && desiredResult === 'Tie') { you = 'Rock'; }
-  if (them === 'Rock' && desiredResult === 'Win') { you = 'Paper'; }
-  if (them === 'Rock' && desiredResult === 'Lose') { you = 'Scissors'; }
-  if (them === 'Paper' && desiredResult === 'Tie') { you = 'Paper'; }
-  if (them === 'Paper' && desiredResult === 'Win') { you = 'Scissors'; }
-  if (them === 'Paper' && desiredResult === 'Lose') { you = 'Rock'; }
-  if (them === 'Scissors' && desiredResult === 'Tie') { you = 'Scissors'; }
-  if (them === 'Scissors' && desiredResult === 'Win') { you = 'Rock'; }
-  if (them === 'Scissors' && desiredResult === 'Lose') { you = 'Paper'; }
-
-  if (them === you) {
-    roundResult = TIE;
-  } else if ((you === 'Rock' && them === 'Scissors')
-    || (you === 'Paper' && them === 'Rock')
-    || (you === 'Scissors' && them === 'Paper')) {
-    roundResult = WIN;
-  }
-
-  return YOU_POINTS_LOOKUP[you] + roundResult;
+  return scoreRound(them, me);
 }
 
 export function part2(filename) {
@@ -106,7 +67,6 @@ export function part2(filename) {
 
 export function run() {
   const filename = './day-02/input.txt';
-  // const filename = './day-02/test-input.txt';
   const results = new Result('Day 02');
 
   let start = performance.now();
