@@ -66,6 +66,7 @@ export default function template(body) {
             <a class="link" href="/">Home</a>
             <a class="link" href="/day-01">Day 01</a>
             <a class="link" href="/day-02">Day 02</a>
+            <a class="link" href="/day-03">Day 03</a>
           </div>
         </aside>
       

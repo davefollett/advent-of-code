@@ -3,6 +3,7 @@ import express from 'express';
 import template from './utils/template.js';
 import { run as day01Run } from './day-01/index.js';
 import { run as day02Run } from './day-02/index.js';
+import { run as day03Run } from './day-03/index.js';
 
 const PORT = 8080;
 
@@ -35,6 +36,11 @@ app.get('/day-01', (req, res) => {
 
 app.get('/day-02', (req, res) => {
   const results = day02Run();
+  res.send(template(formatResult(results)));
+});
+
+app.get('/day-03', (req, res) => {
+  const results = day03Run();
   res.send(template(formatResult(results)));
 });
 
