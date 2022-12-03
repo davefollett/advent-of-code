@@ -18,6 +18,7 @@ module.exports = {
             'ignorePackages'
         ],
         'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
+        // https://stackoverflow.com/a/42237667
         "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     }
 }
