@@ -1,4 +1,4 @@
-export default function template(body) {
+export default function template(body, sidebar) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -63,16 +63,13 @@ export default function template(body) {
       
         <aside>
           <div class="cell nes-container is-dark">
-            <a class="link" href="/">Home</a>
-            <a class="link" href="/day-01">Day 01</a>
-            <a class="link" href="/day-02">Day 02</a>
-            <a class="link" href="/day-03">Day 03</a>
+            ${sidebar}
           </div>
         </aside>
       
         <main>
           <div class="cell nes-container is-dark">
-              <p >${body}</p>
+              <p>${body}</p>
             </div>
         </main>
       
