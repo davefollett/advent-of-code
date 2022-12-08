@@ -1,4 +1,4 @@
-// https://adventofcode.com/2022/day/5
+// https://adventofcode.com/2022/day/6
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
