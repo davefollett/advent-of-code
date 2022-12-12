@@ -15,7 +15,7 @@ function separate(data) {
 
   const numStacks = (data[0].length + 1) / 4;
 
-  for (let i = 0; i < numStacks; i++) {
+  for (let i = 0; i < numStacks; i += 1) {
     stacks.push([]);
   }
 
@@ -25,12 +25,12 @@ function separate(data) {
       return;
     }
 
-    if(separatorFound) {
+    if (separatorFound) {
       moves.push(line);
     } else {
       if (line.includes('1')) { return; }
 
-      for (let k = 1, i = 0; k <= line.length; k += 4, i++) {
+      for (let k = 1, i = 0; k <= line.length; k += 4, i += 1) {
         if (line[k] !== ' ') {
           stacks[i].push(line[k]);
         }
@@ -40,34 +40,27 @@ function separate(data) {
 
   stacks.forEach((stack) => stack.reverse());
 
-  return {stacks, numStacks, moves};
+  return { stacks, numStacks, moves };
 }
-
 
 export function part1(filename) {
   const data = fileParser(filename, lineParserP1);
-  
-  const {stacks, numStacks, moves} = separate(data);
-  // console.log(stacks)
-  // console.log(moves)
-  // console.log(numStacks)
+  const { stacks, numStacks, moves } = separate(data);
 
   moves.forEach((move) => {
-    const [ , amountStr,, srcStackStr,, destStackStr ] = move.split(' ');
+    const [, amountStr,, srcStackStr,, destStackStr] = move.split(' ');
     const amount = parseInt(amountStr, 10);
     const srcStack = parseInt(srcStackStr, 10);
     const destStack = parseInt(destStackStr, 10);
-    // console.log(amount, srcStack, destStack)
-    for (let i = 0; i < amount; i++) {
-      const crate = stacks[srcStack-1].pop();
-      stacks[destStack-1].push(crate);
-    }
-  })
 
-  // console.log(stacks)
+    for (let i = 0; i < amount; i += 1) {
+      const crate = stacks[srcStack - 1].pop();
+      stacks[destStack - 1].push(crate);
+    }
+  });
 
   let result = '';
-  for (let i = 0; i < numStacks; i++) {
+  for (let i = 0; i < numStacks; i += 1) {
     result += stacks[i].pop();
   }
 
@@ -80,25 +73,20 @@ function lineParserP2(line) {
 
 export function part2(filename) {
   const data = fileParser(filename, lineParserP2);
-  const {stacks, numStacks, moves} = separate(data);
-  // console.log(stacks)
+  const { stacks, numStacks, moves } = separate(data);
+
   moves.forEach((move) => {
-    const [ , amountStr,, srcStackStr,, destStackStr ] = move.split(' ');
+    const [, amountStr,, srcStackStr,, destStackStr] = move.split(' ');
     const amount = parseInt(amountStr, 10);
     const srcStack = parseInt(srcStackStr, 10);
     const destStack = parseInt(destStackStr, 10);
-    // console.log(amount, srcStack, destStack)
 
-    const crates = stacks[srcStack-1].splice(stacks[srcStack-1].length - amount, amount);
-    // console.log(amount, crates)
-    stacks[destStack-1] = stacks[destStack-1].concat(crates);
-    // console.log(stacks)
-  })
-
-  
+    const crates = stacks[srcStack - 1].splice(stacks[srcStack - 1].length - amount, amount);
+    stacks[destStack - 1] = stacks[destStack - 1].concat(crates);
+  });
 
   let result = '';
-  for (let i = 0; i < numStacks; i++) {
+  for (let i = 0; i < numStacks; i += 1) {
     result += stacks[i].pop();
   }
 
