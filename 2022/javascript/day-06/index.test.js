@@ -9,7 +9,6 @@ const inputFilename = './day-06/input.txt';
 const testInputFilename = './day-06/test-input.txt';
 
 describe('@/day-06/index.js', () => {
-
   describe('fourUnique', () => {
     it('should return false if not all are unique', () => {
       const actual = fourUnique('m', 'j', 'q', 'j');
@@ -21,8 +20,6 @@ describe('@/day-06/index.js', () => {
       expect(actual).toBe(true);
     });
   });
-
-
 
   describe('part1()', () => {
     it('part1 should pass', () => {
@@ -47,7 +44,6 @@ describe('@/day-06/index.js', () => {
       expect(actual).toBe(true);
     });
   });
-
 
   describe('part2()', () => {
     it('part2 should pass', () => {

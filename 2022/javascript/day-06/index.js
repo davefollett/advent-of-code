@@ -1,10 +1,8 @@
 // https://adventofcode.com/2022/day/6
 
+import fs from 'fs';
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
-import fileParser from '../utils/file-parser.js';
-import fs from 'fs';
-
 
 export function fourUnique(one, two, three, four) {
   let result = false;
@@ -15,23 +13,23 @@ export function fourUnique(one, two, three, four) {
     && two !== three
     && two !== four
     && three !== four) {
-      result = true;
+    result = true;
   }
 
   return result;
 }
 
 export function part1(filename) {
-  const signal = fs.readFileSync(filename, 'utf-8')
+  const signal = fs.readFileSync(filename, 'utf-8');
   let startMakerLocation = 0;
 
   for (let start = 0; start + 3 < signal.length; start += 1) {
-    if (fourUnique(signal[start], signal[start+1], signal[start+2], signal[start+3])) {
+    if (fourUnique(signal[start], signal[start + 1], signal[start + 2], signal[start + 3])) {
       startMakerLocation = start + 3 + 1;
       break;
     }
   }
-  
+
   return startMakerLocation;
 }
 
@@ -41,16 +39,16 @@ export function isUnique(value) {
 }
 
 export function part2(filename) {
-  const signal = fs.readFileSync(filename, 'utf-8')
+  const signal = fs.readFileSync(filename, 'utf-8');
   let startMakerLocation = 0;
 
   for (let start = 0; start + 13 < signal.length; start += 1) {
-    if (isUnique(signal.slice(start, start+13+1))) {
+    if (isUnique(signal.slice(start, start + 13 + 1))) {
       startMakerLocation = start + 13 + 1;
       break;
     }
   }
-  
+
   return startMakerLocation;
 }
 
