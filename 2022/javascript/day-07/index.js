@@ -1,112 +1,99 @@
 // https://adventofcode.com/2022/day/7
 
-import { performance } from 'node:perf_hooks';
-import Result from '../utils/result.js';
-// import fileParser from '../utils/file-parser.js';
 import fs from 'fs';
 import os from 'os';
+import { performance } from 'node:perf_hooks';
+import Result from '../utils/result.js';
 
 function initFileSystem(filename) {
-
   const fileSystem = {
     '/': {
       parentDir: null,
       size: 0,
       files: [],
-      subDirs: {}
-    }
-  }
+      subDirs: {},
+    },
+  };
 
   let currentDir = fileSystem;
   let parseMode = '';
 
   fs.readFileSync(filename, 'utf-8')
     .split(os.EOL)
-    .forEach(command => {
-      // console.log(command);
+    .forEach((command) => {
       if (command === '$ cd /') {
         parseMode = 'cd';
-        // console.log('cd to root');
         currentDir = fileSystem['/'];
       } else if (command === '$ cd ..') {
         parseMode = 'cd';
-        currentDir = currentDir['parentDir'];
+        currentDir = currentDir.parentDir;
       } else if (command.startsWith('$ cd')) {
         parseMode = 'cd';
-        const [ , , dirName ] = command.split(' ');
-        // console.log(`cd to ${dirName}`);
-        currentDir = currentDir['subDirs'][dirName];
+        const [, , dirName] = command.split(' ');
+        currentDir = currentDir.subDirs[dirName];
       } else if (command.startsWith('$ ls')) {
         parseMode = 'ls';
-        // console.log('enter ls mode');
-      } else if(parseMode === 'ls') {
+      } else if (parseMode === 'ls') {
         if (command.startsWith('dir')) {
-          const [ , dirName ] = command.split(' ');
-          // console.log(dirName)
-          // console.log(currentDir['size'])
-          currentDir['subDirs'][dirName] = {
+          const [, dirName] = command.split(' ');
+          currentDir.subDirs[dirName] = {
             parentDir: currentDir,
             size: 0,
             files: [],
             subDirs: {},
-          }
+          };
         } else {
-          const [ sizeStr, fileName ] = command.split(' ');
+          const [sizeStr, fileName] = command.split(' ');
           const size = parseInt(sizeStr, 10);
-          currentDir['files'].push({size,fileName})
-          currentDir['size'] += size;
+          currentDir.files.push({ size, fileName });
+          currentDir.size += size;
         }
       }
-      // console.log(currentDir);
     });
-
-  // console.log(fileSystem['/']['subDirs']['a']['subDirs']['e']);
-  // console.log(fileSystem['/']);
 
   return fileSystem;
 }
 
 const dirs = [];
 
-function dfs(currentDir, limit) { 
-
+function dfs(currentDir) {
   let size = 0;
 
-  for (const [key, value] of Object.entries(currentDir['subDirs'])) {
-    // console.log(key)
-    size = dfs(currentDir['subDirs'][key], limit)
-    if (size <= limit) {
-      // console.log('push', size)
-      dirs.push(size);
-    } else {
-      // console.log('too big',size)
-    }
+  for (const key of Object.keys(currentDir.subDirs)) {
+    size += dfs(currentDir.subDirs[key]);
   }
+  dirs.push(currentDir.size + size);
 
-  return currentDir['size'] + size;
+  return currentDir.size + size;
 }
 
-
-// 836301 -- too low
 export function part1(filename) {
   const fileSystem = initFileSystem(filename);
   const LIMIT = 100000;
-  let currentDir = fileSystem['/'];
-  dirs.length = 0
+  const currentDir = fileSystem['/'];
+  dirs.length = 0;
 
-  const size = dfs(currentDir, LIMIT);
-  if (size <= LIMIT) {
-    // console.log('push', size)
-    dirs.push(size);
-  }
+  dfs(currentDir);
 
-  return dirs.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  return dirs
+    .filter((size) => size <= LIMIT)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 }
 
 export function part2(filename) {
-  const signal = fs.readFileSync(filename, 'utf-8')
-  
-  return 0;
+  const SPACE_AVAILABLE = 70000000;
+  const UNUSED_MIN = 30000000;
+  const fileSystem = initFileSystem(filename);
+
+  const currentDir = fileSystem['/'];
+  dirs.length = 0;
+  const rootSize = dfs(currentDir);
+
+  const currentUnused = SPACE_AVAILABLE - rootSize;
+  const sizeNeeded = UNUSED_MIN - currentUnused;
+  const filteredDirs = dirs.filter((size) => size >= sizeNeeded);
+
+  return Math.min(...filteredDirs);
 }
 
 export function run() {
