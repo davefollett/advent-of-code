@@ -5,8 +5,7 @@ import os from 'os';
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
 
-// 14660 too high
-export function part1(filename) {
+function initCycles(filename) {
   const cycles = [];
   let x = 1;
 
@@ -24,6 +23,12 @@ export function part1(filename) {
       }
     });
 
+  return cycles;
+}
+
+export function part1(filename) {
+  const cycles = initCycles(filename);
+
   let result = 0;
   for (let i = 19; i < cycles.length; i += 40) {
     // console.log(`cycle=${i+1} value=${cycles[i]} strength=${(i + 1) * cycles[i]}`)
@@ -34,7 +39,28 @@ export function part1(filename) {
 }
 
 export function part2(filename) {
-  return 0;
+  const cycles = initCycles(filename);
+  let spritePosition = 1;
+  const row = [];
+
+  for (let i = 0; i < cycles.length; i += 1) {
+    spritePosition = cycles[i];
+    const iOffset = i % 40;
+    if (iOffset === 0) {
+      row.push('\n');
+    }
+    if (iOffset === spritePosition - 1
+      || iOffset === spritePosition
+      || iOffset === spritePosition + 1) {
+      row.push('#');
+    } else {
+      row.push('.');
+    }
+  }
+
+  // console.log(row.join(''));
+
+  return row.join('');
 }
 
 export function run() {

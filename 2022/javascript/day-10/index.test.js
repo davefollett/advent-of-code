@@ -19,15 +19,29 @@ describe('@/day-10/index.js', () => {
     });
   });
 
-  // describe('part2()', () => {
-  //   it('part2 should pass', () => {
-  //     const answer = part2(inputFilename);
-  //     expect(answer).toBe(0);
-  //   });
+  describe('part2()', () => {
+    it('part2 should pass', () => {
+      const answer = part2(inputFilename);
+      const expected = `
+####..##..#....#..#.###..#....####...##.
+#....#..#.#....#..#.#..#.#....#.......#.
+###..#....#....####.###..#....###.....#.
+#....#.##.#....#..#.#..#.#....#.......#.
+#....#..#.#....#..#.#..#.#....#....#..#.
+####..###.####.#..#.###..####.#.....##..`;
+      expect(answer).toBe(expected);
+    });
 
-  //   it('part2 should pass test input', () => {
-  //     const answer = part2(testInputFilename);
-  //     expect(answer).toBe(0);
-  //   });
-  // });
+    it('part2 should pass test input', () => {
+      const answer = part2(testInputFilename);
+      const expected = `
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....`;
+      expect(answer).toBe(expected);
+    });
+  });
 });
