@@ -5,9 +5,32 @@ import os from 'os';
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
 
-
+// 14660 too high
 export function part1(filename) {
-  return 0;
+  const cycles = [];
+  let x = 1;
+
+  fs.readFileSync(filename, 'utf-8')
+    .split(os.EOL)
+    .forEach((signal) => {
+      if (signal === 'noop') {
+        cycles.push(x);
+      } else {
+        cycles.push(x);
+        cycles.push(x);
+        const [, valueStr] = signal.split(' ');
+        const value = parseInt(valueStr, 10);
+        x += value;
+      }
+    });
+
+  let result = 0;
+  for (let i = 19; i < cycles.length; i += 40) {
+    // console.log(`cycle=${i+1} value=${cycles[i]} strength=${(i + 1) * cycles[i]}`)
+    result += (i + 1) * cycles[i];
+  }
+
+  return result;
 }
 
 export function part2(filename) {
