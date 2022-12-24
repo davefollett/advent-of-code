@@ -10,7 +10,7 @@ describe('@/day-10/index.js', () => {
   describe('part1()', () => {
     it('part1 should pass', () => {
       const answer = part1(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(54054);
     });
 
     it('part1 should pass test input', () => {
@@ -19,15 +19,15 @@ describe('@/day-10/index.js', () => {
     });
   });
 
-  describe('part2()', () => {
-    it('part2 should pass', () => {
-      const answer = part2(inputFilename);
-      expect(answer).toBe(0);
-    });
+  // describe('part2()', () => {
+  //   it('part2 should pass', () => {
+  //     const answer = part2(inputFilename);
+  //     expect(answer).toBe(0);
+  //   });
 
-    it('part2 should pass test input', () => {
-      const answer = part2(testInputFilename);
-      expect(answer).toBe(0);
-    });
-  });
+  //   it('part2 should pass test input', () => {
+  //     const answer = part2(testInputFilename);
+  //     expect(answer).toBe(2713310158);
+  //   });
+  // });
 });
