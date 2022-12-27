@@ -19,15 +19,15 @@ describe('@/day-10/index.js', () => {
     });
   });
 
-  // describe('part2()', () => {
-  //   it('part2 should pass', () => {
-  //     const answer = part2(inputFilename);
-  //     expect(answer).toBe(0);
-  //   });
+  describe('part2()', () => {
+    it('part2 should pass', () => {
+      const answer = part2(inputFilename);
+      expect(answer).toBe(14314925001);
+    });
 
-  //   it('part2 should pass test input', () => {
-  //     const answer = part2(testInputFilename);
-  //     expect(answer).toBe(2713310158);
-  //   });
-  // });
+    it('part2 should pass test input', () => {
+      const answer = part2(testInputFilename);
+      expect(answer).toBe(2713310158);
+    });
+  });
 });
