@@ -12,9 +12,8 @@ describe('@/utils/array.js', () => {
   });
 
   it('will chunk array into groups of 2 with custom parser', () => {
-
-    function customParser(chunk) {
-      return chunk.map((item) => item.toString());
+    function customParser(chunkFunction) {
+      return chunkFunction.map((item) => item.toString());
     }
 
     const arr = [0, 1, 2, 3, 4, 5];

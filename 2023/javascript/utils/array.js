@@ -1,13 +1,12 @@
-
-function defaultChunkParser(chunk) {
-  return chunk;
+function defaultChunkParser(chunkFunction) {
+  return chunkFunction;
 }
 
 export function chunk(arr, size, parser = defaultChunkParser) {
   const result = [];
   for (let i = 0; i < arr.length; i += size) {
-    const chunk = arr.slice(i, i + size);
-    result.push(parser(chunk));
+    const chunkFunction = arr.slice(i, i + size);
+    result.push(parser(chunkFunction));
   }
 
   return result;

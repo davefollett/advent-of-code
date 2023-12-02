@@ -35,4 +35,3 @@ app.get('/day-01', (req, res) => {
   const results = day01Run();
   res.send(template(formatResult(results), sidebar));
 });
-
