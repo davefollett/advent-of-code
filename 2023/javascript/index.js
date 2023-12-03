@@ -2,6 +2,7 @@ import express from 'express';
 import template from './utils/template.js';
 import { run as day01Run } from './day-01/index.js';
 import { run as day02Run } from './day-02/index.js';
+import { run as day03Run } from './day-03/index.js';
 
 const PORT = 8080;
 
@@ -22,6 +23,7 @@ const sidebar = `
   <a class="link" href="/">Home</a>
   <a class="link" href="/day-01">Day 01</a>
   <a class="link" href="/day-02">Day 02</a>
+  <a class="link" href="/day-03">Day 03</a>
 `;
 
 app.listen(PORT, () => {
@@ -40,5 +42,10 @@ app.get('/day-01', (req, res) => {
 
 app.get('/day-02', (req, res) => {
   const results = day02Run();
+  res.send(template(formatResult(results), sidebar));
+});
+
+app.get('/day-03', (req, res) => {
+  const results = day03Run();
   res.send(template(formatResult(results), sidebar));
 });
