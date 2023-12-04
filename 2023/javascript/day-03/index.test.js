@@ -15,21 +15,21 @@ describe('@/day-03/index.js', () => {
       expect(answer).toBe(554003);
     });
 
-    it.skip('part1 should pass test input', () => {
+    it('part1 should pass test input', () => {
       const answer = part1(testInputFilename);
       expect(answer).toBe(4361);
     });
   });
 
   describe('part2()', () => {
-    it.skip('part2 should pass', () => {
+    it('part2 should pass', () => {
       const answer = part2(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(87263515);
     });
 
-    it.skip('part2 should pass test input', () => {
+    it('part2 should pass test input', () => {
       const answer = part2(testInputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(467835);
     });
   });
 });

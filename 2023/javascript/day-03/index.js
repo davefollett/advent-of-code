@@ -99,17 +99,87 @@ export function part1(filename) {
     if (number.isPartNumber) { result += number.number; }
   });
 
-  // console.log(numbers)
   return result;
 }
 
-function lineParserP2(line) {
-  return line;
+function isGearSymbol(value) {
+  return value === '*';
 }
 
 export function part2(filename) {
-  const line = fileParser(filename, lineParserP2);
-  return 0;
+  let result = 0;
+
+  const grid = createGrid(filename);
+
+  const numbers = [];
+  const symbols = [];
+
+  for (let row = 0; row < grid.length; row++) {
+
+    let current = null;
+
+    for (let col = 0; col < grid[row].length; col++) {
+      const value = grid[row][col];
+      const location = `${row}-${col}`;
+
+      if (isDigit(value)) {
+        if (current === null) {
+          current = {
+            digits: [],
+            digitLocations: [],
+            isPartNumber: false,
+            number: 0,
+          };
+        }
+        current.digits.push(value);
+        current.digitLocations.push(location);
+      } else if (isDot(value)) {
+        if (current !== null) {
+          current.number = computeNumber(current.digits);
+          numbers.push(current);
+          current = null;
+        }
+      } else {
+        if (isGearSymbol(value)) {
+          symbols.push(location);
+        }
+        if (current !== null) {
+          current.number = computeNumber(current.digits);
+          numbers.push(current);
+          current = null;
+        }
+      }
+    }
+    if (current !== null) {
+      current.number = computeNumber(current.digits);
+      numbers.push(current);
+    }
+  }
+
+  symbols.forEach((symbol) => {
+    const numbersAdjacent = []
+    numbers.forEach((number) => {
+      const row = parseInt(symbol.split('-')[0], 10);
+      const col = parseInt(symbol.split('-')[1], 10);
+      let isSymbolAdjacent = false;
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row}-${col + 1}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row}-${col - 1}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row - 1}-${col - 1}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row - 1}-${col}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row - 1}-${col + 1}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row + 1}-${col - 1}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row + 1}-${col}`);
+      isSymbolAdjacent ||= number.digitLocations.includes(`${row + 1}-${col + 1}`);
+      if (isSymbolAdjacent) {
+        numbersAdjacent.push(number.number);
+      }
+    });
+    if (numbersAdjacent.length === 2) {
+      result += numbersAdjacent[0] * numbersAdjacent[1];
+    }
+  });
+
+  return result;
 }
 
 export function run() {
