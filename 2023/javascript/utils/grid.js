@@ -4,7 +4,7 @@ function lineParserGrid(line) {
   return line.split('');
 }
 
-export function createGrid(filename) {
+export default function createGrid(filename) {
   const grid = fileParser(filename, lineParserGrid);
   return grid;
 }

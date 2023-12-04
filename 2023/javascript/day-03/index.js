@@ -2,15 +2,12 @@
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
-import fileParser from '../utils/file-parser.js';
-import { sumNumbers } from '../utils/array.js';
-import { createGrid }from '../utils/grid.js';
-
+import createGrid from '../utils/grid.js';
 
 function isDigit(value) {
-  if (!value) { return false }
-  if (!value.length) { return false }
-  if (value.length > 1) { return false }
+  if (!value) { return false; }
+  if (!value.length) { return false; }
+  if (value.length > 1) { return false; }
 
   let result = false;
   const asciiValue = value.charCodeAt(0);
@@ -45,7 +42,7 @@ function isAdjacent(symbols, digitLocations) {
   });
   return result;
 }
- 
+
 export function part1(filename) {
   let result = 0;
 
@@ -54,11 +51,10 @@ export function part1(filename) {
   const numbers = [];
   const symbols = new Set();
 
-  for (let row = 0; row < grid.length; row++) {
-
+  for (let row = 0; row < grid.length; row += 1) {
     let current = null;
 
-    for (let col = 0; col < grid[row].length; col++) {
+    for (let col = 0; col < grid[row].length; col += 1) {
       const value = grid[row][col];
       const location = `${row}-${col}`;
 
@@ -95,6 +91,7 @@ export function part1(filename) {
   }
 
   numbers.forEach((number) => {
+    /* eslint-disable-next-line no-param-reassign */
     number.isPartNumber = isAdjacent(symbols, number.digitLocations);
     if (number.isPartNumber) { result += number.number; }
   });
@@ -114,11 +111,10 @@ export function part2(filename) {
   const numbers = [];
   const symbols = [];
 
-  for (let row = 0; row < grid.length; row++) {
-
+  for (let row = 0; row < grid.length; row += 1) {
     let current = null;
 
-    for (let col = 0; col < grid[row].length; col++) {
+    for (let col = 0; col < grid[row].length; col += 1) {
       const value = grid[row][col];
       const location = `${row}-${col}`;
 
@@ -157,7 +153,7 @@ export function part2(filename) {
   }
 
   symbols.forEach((symbol) => {
-    const numbersAdjacent = []
+    const numbersAdjacent = [];
     numbers.forEach((number) => {
       const row = parseInt(symbol.split('-')[0], 10);
       const col = parseInt(symbol.split('-')[1], 10);
