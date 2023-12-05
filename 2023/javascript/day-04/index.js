@@ -14,23 +14,10 @@ function lineParserP1(line) {
     if (elfNumbers.includes(number)) {
       numWinners += 1;
     }
-  })
+  });
 
-  let result = 0;
-  if (numWinners) {
-    result = 1;
-    if (numWinners > 1) {
-      for (let i = 0; i<numWinners-1; i += 1 ) {
-        result *= 2;
-      }
-    }
-  }
-  
-  // console.log(numWinners)
-  // const result = Math.pow(2, numWinners - 1) + 1;
-  // console.log(result)
-  // console.log(winningNumbers)
-  // console.log(elfNumbers)
+  const result = (numWinners) ? 2 ** (numWinners - 1) : 0;
+
   return result;
 }
 
@@ -49,7 +36,7 @@ function lineParserP2(line) {
     if (elfNumbers.includes(number)) {
       numWinners += 1;
     }
-  })
+  });
 
   return {
     cardNumber,
@@ -57,7 +44,7 @@ function lineParserP2(line) {
     elfNumbers,
     numWinners,
     instances: 1,
-  }
+  };
 }
 
 export function part2(filename) {
@@ -70,31 +57,19 @@ export function part2(filename) {
       elfNumbers: card.elfNumbers,
       numWinners: card.numWinners,
       instances: card.instances,
+    };
+  });
+
+  Object.keys(cards).forEach((num) => {
+    const multiplier = cards[num].instances;
+    for (let w = 1; w <= cards[num].numWinners; w += 1) {
+      const index = (parseInt(num, 10) + w).toString();
+      cards[index].instances += 1 * multiplier;
     }
-  })
+  });
 
-// console.log(cards)
+  const result = Object.values(cards).reduce((sum, card) => sum + card.instances, 0);
 
-  for (const num in cards) {
-    // console.log(cards[num])
-    // console.log(`processing card ${num}, ${cards[num].instances} times.`)
-    for (let i = 0; i < cards[num].instances; i += 1) {
-      // console.log(`processing card ${num} instance number ${i}`)
-      for (let w = 1; w <= cards[num].numWinners; w += 1 ) {
-        const index = (parseInt(num, 10) + w).toString();
-        cards[index].instances += 1;
-        // console.log(index)
-      }
-    }
-  }
-
-  let result = 0;
-  for (const num in cards) {
-    result += cards[num].instances;
-  }
-
-  // for (let card = 0;)
-  // console.log(cards)
   return result;
 }
 
