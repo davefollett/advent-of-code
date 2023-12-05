@@ -2,7 +2,7 @@
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
-import fileParser from '../utils/file-parser.js';
+import fileParser, { fileParserToObject } from '../utils/file-parser.js';
 import { sumNumbers } from '../utils/array.js';
 
 function lineParserP1(line) {
@@ -39,26 +39,18 @@ function lineParserP2(line) {
   });
 
   return {
-    cardNumber,
-    winningNumbers,
-    elfNumbers,
-    numWinners,
-    instances: 1,
+    key: cardNumber,
+    value: {
+      winningNumbers,
+      elfNumbers,
+      numWinners,
+      instances: 1,
+    },
   };
 }
 
 export function part2(filename) {
-  const cardArray = fileParser(filename, lineParserP2);
-  const cards = {};
-
-  cardArray.forEach((card) => {
-    cards[card.cardNumber] = {
-      winningNumbers: card.winningNumbers,
-      elfNumbers: card.elfNumbers,
-      numWinners: card.numWinners,
-      instances: card.instances,
-    };
-  });
+  const cards = fileParserToObject(filename, lineParserP2);
 
   Object.keys(cards).forEach((num) => {
     const multiplier = cards[num].instances;

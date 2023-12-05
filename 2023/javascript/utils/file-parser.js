@@ -10,3 +10,15 @@ export default function fileParser(filename, lineParser = defaultLineParser) {
 
   return results;
 }
+
+export function fileParserToObject(filename, lineParser) {
+  const results = {};
+  fs.readFileSync(filename, 'utf-8')
+    .split(os.EOL)
+    .forEach((line) => {
+      const { key, value } = lineParser(line);
+      results[key] = value;
+    });
+
+  return results;
+}
