@@ -20,14 +20,14 @@ describe('@/day-05/index.js', () => {
   });
 
   describe('part2()', () => {
-    it.skip('part2 should pass', () => {
+    it('part2 should pass', () => {
       const answer = part2(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(12634632);
     });
 
-    it.skip('part2 should pass test input', () => {
+    it('part2 should pass test input', () => {
       const answer = part2(testInputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(46);
     });
   });
 });
