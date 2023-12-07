@@ -6,6 +6,7 @@ import { run as day03Run } from './day-03/index.js';
 import { run as day04Run } from './day-04/index.js';
 import { run as day05Run } from './day-05/index.js';
 import { run as day06Run } from './day-06/index.js';
+import { run as day06Run } from './day-07/index.js';
 
 const PORT = 8080;
 
@@ -30,6 +31,7 @@ const sidebar = `
   <a class="link" href="/day-04">Day 04</a>
   <a class="link" href="/day-05">Day 05</a>
   <a class="link" href="/day-06">Day 06</a>
+  <a class="link" href="/day-07">Day 07</a>
 `;
 
 app.listen(PORT, () => {
@@ -68,5 +70,10 @@ app.get('/day-05', (req, res) => {
 
 app.get('/day-06', (req, res) => {
   const results = day06Run();
+  res.send(template(formatResult(results), sidebar));
+});
+
+app.get('/day-07', (req, res) => {
+  const results = day07Run();
   res.send(template(formatResult(results), sidebar));
 });
