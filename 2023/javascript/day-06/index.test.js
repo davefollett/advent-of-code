@@ -6,7 +6,7 @@ import {
 const inputFilename = './day-06/input.txt';
 const testInputFilename = './day-06/test-input.txt';
 
-describe('@/day-05/index.js', () => {
+describe('@/day-06/index.js', () => {
   describe('part1()', () => {
     it('part1 should pass', () => {
       const answer = part1(inputFilename);
