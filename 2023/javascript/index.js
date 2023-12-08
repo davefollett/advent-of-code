@@ -6,7 +6,7 @@ import { run as day03Run } from './day-03/index.js';
 import { run as day04Run } from './day-04/index.js';
 import { run as day05Run } from './day-05/index.js';
 import { run as day06Run } from './day-06/index.js';
-import { run as day06Run } from './day-07/index.js';
+import { run as day07Run } from './day-07/index.js';
 
 const PORT = 8080;
 

@@ -20,35 +20,31 @@ const cardToValue = {
   Q: 10,
   J: 9,
   T: 8,
-  '9': 7,
-  '8': 6,
-  '7': 5,
-  '6': 4,
-  '5': 3,
-  '4': 2,
-  '3': 1,
-  '2': 0,
+  9: 7,
+  8: 6,
+  7: 5,
+  6: 4,
+  5: 3,
+  4: 2,
+  3: 1,
+  2: 0,
 };
 
-function determineHandType(cardCounts) {
-  if (isFiveOfAKind(cardCounts)) { return 'fiveOfAKind'; }
-  if (isFourOfAKind(cardCounts)) { return 'fourOfAKind'; }
-  if (isFullHouse(cardCounts)) { return 'fullHouse'; }
-  if (isThreeOfAKind(cardCounts)) { return 'threeOfAKind'; }
-  if (isTwoPair(cardCounts)) { return 'twoPair'; }
-  if (isOnePair(cardCounts)) { return 'onePair'; }
-  return 'highCard';
-}
-function determineCardCounts(cards) {
-  const cardCounts = cards.reduce(function(obj, item) {
-    if (!obj[item]) {
-      obj[item] = 0;
-    }
-    obj[item]++;
-    return obj;
-  }, {});
-  return cardCounts;
-}
+const cardToValueJoker = {
+  A: 12,
+  K: 11,
+  Q: 10,
+  J: -1,
+  T: 8,
+  9: 7,
+  8: 6,
+  7: 5,
+  6: 4,
+  5: 3,
+  4: 2,
+  3: 1,
+  2: 0,
+};
 
 export function isFiveOfAKind(cardCounts) {
   for (const count of Object.values(cardCounts)) {
@@ -116,15 +112,35 @@ export function isOnePair(cardCounts) {
   return pairCount === 1;
 }
 
+function determineHandType(cardCounts) {
+  if (isFiveOfAKind(cardCounts)) { return 'fiveOfAKind'; }
+  if (isFourOfAKind(cardCounts)) { return 'fourOfAKind'; }
+  if (isFullHouse(cardCounts)) { return 'fullHouse'; }
+  if (isThreeOfAKind(cardCounts)) { return 'threeOfAKind'; }
+  if (isTwoPair(cardCounts)) { return 'twoPair'; }
+  if (isOnePair(cardCounts)) { return 'onePair'; }
+  return 'highCard';
+}
+function determineCardCounts(cards) {
+  const cardCounts = cards.reduce((obj, item) => {
+    if (!obj[item]) {
+      obj[item] = 0;
+    }
+    obj[item] += 1;
+    return obj;
+  }, {});
+  return cardCounts;
+}
+
 function lineParserP1(line) {
   const hand = line.split(' ')[0];
   const bid = parseInt(line.split(' ')[1], 10);
   const cards = hand.split('');
-  const cardValues = cards.map((card) => cardToValue[card])
+  const cardValues = cards.map((card) => cardToValue[card]);
   const cardCounts = determineCardCounts(cards);
   const type = determineHandType(cardCounts);
   const typeValue = typeToValue[type];
-  
+
   return {
     hand,
     bid,
@@ -134,7 +150,7 @@ function lineParserP1(line) {
     type,
     cardCounts,
     typeValue,
-  }
+  };
 }
 
 export function part1(filename) {
@@ -156,14 +172,73 @@ export function part1(filename) {
   return result;
 }
 
+function determineHandTypeJoker(cardCounts) {
+  const jokers = cardCounts.J || 0;
+
+  if (isFiveOfAKind(cardCounts)) { return 'fiveOfAKind'; }
+  if (isFourOfAKind(cardCounts)) {
+    if (jokers > 0) { return 'fiveOfAKind'; }
+    return 'fourOfAKind';
+  }
+  if (isFullHouse(cardCounts)) {
+    if (jokers > 0) { return 'fiveOfAKind'; }
+    return 'fullHouse';
+  }
+  if (isThreeOfAKind(cardCounts)) {
+    if (jokers === 1 || jokers === 3) { return 'fourOfAKind'; }
+    return 'threeOfAKind';
+  }
+  if (isTwoPair(cardCounts)) {
+    if (jokers === 2) { return 'fourOfAKind'; }
+    if (jokers === 1) { return 'fullHouse'; }
+    return 'twoPair';
+  }
+  if (isOnePair(cardCounts)) {
+    if (jokers === 1 || jokers === 2) { return 'threeOfAKind'; }
+    return 'onePair';
+  }
+  if (jokers === 1) { return 'onePair'; }
+  return 'highCard';
+}
+
 function lineParserP2(line) {
-  return line;
+  const hand = line.split(' ')[0];
+  const bid = parseInt(line.split(' ')[1], 10);
+  const cards = hand.split('');
+  const cardValues = cards.map((card) => cardToValueJoker[card]);
+  const cardCounts = determineCardCounts(cards);
+  const type = determineHandTypeJoker(cardCounts);
+  const typeValue = typeToValue[type];
+
+  return {
+    hand,
+    bid,
+    cards,
+    cardValues,
+    rank: 0,
+    type,
+    cardCounts,
+    typeValue,
+  };
 }
 
 export function part2(filename) {
-  const lines = fileParser(filename, lineParserP2);
+  const hands = fileParser(filename, lineParserP2);
+  hands.sort((a, b) => {
+    return a.typeValue - b.typeValue
+      || a.cardValues[0] - b.cardValues[0]
+      || a.cardValues[1] - b.cardValues[1]
+      || a.cardValues[2] - b.cardValues[2]
+      || a.cardValues[3] - b.cardValues[3]
+      || a.cardValues[4] - b.cardValues[4];
+  });
 
-  return 0;
+  let result = 0;
+  for (let i = 0; i < hands.length; i += 1) {
+    result += hands[i].bid * (i + 1);
+  }
+
+  return result;
 }
 
 export function run() {
