@@ -121,6 +121,8 @@ function determineHandType(cardCounts) {
   if (isOnePair(cardCounts)) { return 'onePair'; }
   return 'highCard';
 }
+
+/* eslint-disable no-param-reassign */
 function determineCardCounts(cards) {
   const cardCounts = cards.reduce((obj, item) => {
     if (!obj[item]) {
@@ -131,6 +133,7 @@ function determineCardCounts(cards) {
   }, {});
   return cardCounts;
 }
+/* eslint-enable no-param-reassign */
 
 function lineParserP1(line) {
   const hand = line.split(' ')[0];
@@ -155,14 +158,12 @@ function lineParserP1(line) {
 
 export function part1(filename) {
   const hands = fileParser(filename, lineParserP1);
-  hands.sort((a, b) => {
-    return a.typeValue - b.typeValue
+  hands.sort((a, b) => a.typeValue - b.typeValue
     || a.cardValues[0] - b.cardValues[0]
     || a.cardValues[1] - b.cardValues[1]
     || a.cardValues[2] - b.cardValues[2]
     || a.cardValues[3] - b.cardValues[3]
-    || a.cardValues[4] - b.cardValues[4];
-  });
+    || a.cardValues[4] - b.cardValues[4]);
 
   let result = 0;
   for (let i = 0; i < hands.length; i += 1) {
@@ -224,14 +225,12 @@ function lineParserP2(line) {
 
 export function part2(filename) {
   const hands = fileParser(filename, lineParserP2);
-  hands.sort((a, b) => {
-    return a.typeValue - b.typeValue
+  hands.sort((a, b) => a.typeValue - b.typeValue
       || a.cardValues[0] - b.cardValues[0]
       || a.cardValues[1] - b.cardValues[1]
       || a.cardValues[2] - b.cardValues[2]
       || a.cardValues[3] - b.cardValues[3]
-      || a.cardValues[4] - b.cardValues[4];
-  });
+      || a.cardValues[4] - b.cardValues[4]);
 
   let result = 0;
   for (let i = 0; i < hands.length; i += 1) {
