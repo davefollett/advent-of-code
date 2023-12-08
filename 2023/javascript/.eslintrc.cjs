@@ -20,5 +20,13 @@ module.exports = {
         'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
         // https://stackoverflow.com/a/42237667
         "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+        // https://stackoverflow.com/a/66902167
+        "no-param-reassign": [
+            "error",
+            {
+              "props": true,
+              "ignorePropertyModificationsFor": ["accu"]
+            }
+        ],
     }
 }
