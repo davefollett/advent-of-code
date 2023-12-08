@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
+    "start:test": "node index.js",
     "debug": "nodemon --inspect index.js",
     "lint": "eslint --max-warnings=0 '**/*.js'",
     "lint:fix": "eslint --max-warnings=0 '**/*.js' --fix",
