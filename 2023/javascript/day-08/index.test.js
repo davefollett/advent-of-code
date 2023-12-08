@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import {
   part1,
   part2,
@@ -9,14 +8,14 @@ const testInputFilename = './day-08/test-input.txt';
 
 describe('@/day-08/index.js', () => {
   describe('part1()', () => {
-    it.skip('part1 should pass', () => {
+    it('part1 should pass', () => {
       const answer = part1(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(22411);
     });
 
     it('part1 should pass test input', () => {
       const answer = part1(testInputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(6);
     });
   });
 
@@ -32,4 +31,4 @@ describe('@/day-08/index.js', () => {
     });
   });
 });
-/* eslint-enable object-curly-newline */
+
