@@ -22,3 +22,7 @@ export function fileParserToObject(filename, lineParser) {
 
   return results;
 }
+
+export function fileParserToString(filename) {
+  return fs.readFileSync(filename, 'utf-8');
+}

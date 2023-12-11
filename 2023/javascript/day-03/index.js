@@ -2,7 +2,7 @@
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
-import createGrid from '../utils/grid.js';
+import createGrid from '../utils/createGrid.js';
 
 function isDigit(value) {
   if (!value) { return false; }
