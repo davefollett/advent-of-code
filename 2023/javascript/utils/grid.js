@@ -1,7 +1,10 @@
+import fs from 'fs';
 import os from 'os';
 
 export default class Grid {
   #grid;
+
+  #gridRaw;
 
   #numRows;
 
@@ -9,8 +12,16 @@ export default class Grid {
 
   #currentLocation;
 
-  constructor(gridString) {
-    this.#grid = gridString
+  constructor({ gridString, gridFilename }) {
+    if (gridString) {
+      this.#gridRaw = gridString;
+    }
+
+    if (gridFilename) {
+      this.#gridRaw = fs.readFileSync(gridFilename, 'utf-8');
+    }
+
+    this.#grid = this.#gridRaw
       .split(os.EOL)
       .map((line) => line.split(''));
 
@@ -31,8 +42,22 @@ export default class Grid {
     return this.#currentLocation;
   }
 
+  get raw() {
+    return this.#gridRaw;
+  }
+
   at({ row = this.#currentLocation.row, col = this.#currentLocation.col } = {}) {
     return this.#grid[row][col];
+  }
+
+  find(value) {
+    for (let row = 0; row < this.#grid.length; row += 1) {
+      for (let col = 0; col < this.#grid[row].length; col += 1) {
+        if (this.#grid[row][col] === value) {
+          return { row, col };
+        }
+      }
+    }
   }
 
   moveTo({ row, col }) {
