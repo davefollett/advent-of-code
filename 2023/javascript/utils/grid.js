@@ -30,6 +30,13 @@ export default class Grid {
     this.#currentLocation = { row: 0, col: 0 };
   }
 
+  #validateRange({ row, col }) {
+    if (row >= this.#numRows || row < 0) { return false; }
+    if (col >= this.#numCols || col < 0) { return false; }
+
+    return true;
+  }
+
   get numRows() {
     return this.#numRows;
   }
@@ -47,6 +54,8 @@ export default class Grid {
   }
 
   at({ row = this.#currentLocation.row, col = this.#currentLocation.col } = {}) {
+    if (!this.#validateRange({ row, col })) { return null; }
+
     return this.#grid[row][col];
   }
 
@@ -61,28 +70,26 @@ export default class Grid {
   }
 
   moveTo({ row, col }) {
+    if (!this.#validateRange({ row, col })) { return null; }
     this.#currentLocation = { row, col };
+
     return this.at({ row, col });
   }
 
   moveUp() {
-    this.#currentLocation.row -= 1;
-    return this.at();
+    return this.moveTo({ row: this.#currentLocation.row - 1, col: this.#currentLocation.col });
   }
 
   moveDown() {
-    this.#currentLocation.row += 1;
-    return this.at();
+    return this.moveTo({ row: this.#currentLocation.row + 1, col: this.#currentLocation.col });
   }
 
   moveLeft() {
-    this.#currentLocation.col -= 1;
-    return this.at();
+    return this.moveTo({ row: this.#currentLocation.row, col: this.#currentLocation.col - 1 });
   }
 
   moveRight() {
-    this.#currentLocation.row += 1;
-    return this.at();
+    return this.moveTo({ row: this.#currentLocation.row, col: this.#currentLocation.col + 1 });
   }
 
   peekUp() {
