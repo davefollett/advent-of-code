@@ -2,15 +2,22 @@
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
-import fileParser from '../utils/file-parser.js';
-
-function lineParserP1(line) {
-  return line;
-}
+import { fileParserToString } from '../utils/file-parser.js';
 
 export function part1(filename) {
-  const lines = fileParser(filename, lineParserP1);
-  return 0;
+  const steps = fileParserToString(filename)
+    .split(',')
+    .reduce((accu, step) => {
+      let stepTotal = 0;
+      for (const c of step) {
+        stepTotal += c.charCodeAt(0);
+        stepTotal *= 17;
+        stepTotal = stepTotal % 256;
+      }
+      return accu + stepTotal;
+    }, 0);
+
+  return steps;
 }
 
 function lineParserP2(line) {

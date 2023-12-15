@@ -9,25 +9,25 @@ const testInputFilename = './day-15/test-input.txt';
 
 describe('@/day-15/index.js', () => {
   describe('part1()', () => {
-    test('part1 should pass', () => {
-      const answer = part1(inputFilename);
-      expect(answer).toBe(0);
+    test('part1 should pass test input', () => {
+      const answer = part1(testInputFilename);
+      expect(answer).toBe(1320);
     });
 
-    test.skip('part1 should pass test input', () => {
-      const answer = part1(testInputFilename);
-      expect(answer).toBe(0);
+    test('part1 should pass', () => {
+      const answer = part1(inputFilename);
+      expect(answer).toBe(515210);
     });
   });
 
   describe('part2()', () => {
-    test.skip('part2 should pass', () => {
-      const answer = part2(inputFilename);
+    test.skip('part2 should pass test input', () => {
+      const answer = part2(testInputFilename);
       expect(answer).toBe(0);
     });
 
-    test.skip('part2 should pass test input', () => {
-      const answer = part2(testInputFilename);
+    test.skip('part2 should pass', () => {
+      const answer = part2(inputFilename);
       expect(answer).toBe(0);
     });
   });
