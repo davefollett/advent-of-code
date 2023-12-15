@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import Result from './result.js';
 
 describe('@/utils/result.js', () => {

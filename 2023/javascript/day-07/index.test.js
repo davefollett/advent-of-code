@@ -1,4 +1,5 @@
 /* eslint-disable object-curly-newline */
+import { describe, expect, test } from 'vitest';
 import {
   part1,
   part2,
@@ -58,24 +59,24 @@ describe('@/day-07/index.js', () => {
   });
 
   describe('part1()', () => {
-    it('part1 should pass', () => {
+    test('part1 should pass', () => {
       const answer = part1(inputFilename);
       expect(answer).toBe(253866470);
     });
 
-    it('part1 should pass test input', () => {
+    test('part1 should pass test input', () => {
       const answer = part1(testInputFilename);
       expect(answer).toBe(6440);
     });
   });
 
   describe('part2()', () => {
-    it('part2 should pass', () => {
+    test('part2 should pass', () => {
       const answer = part2(inputFilename);
       expect(answer).toBe(254494947);
     });
 
-    it('part2 should pass test input', () => {
+    test('part2 should pass test input', () => {
       const answer = part2(testInputFilename);
       expect(answer).toBe(5905);
     });

@@ -1,3 +1,9 @@
+import {
+  describe,
+  expect,
+  test,
+  beforeEach,
+} from 'vitest';
 import Grid from './grid.js';
 
 /* eslint-disable-next-line no-multi-str */
@@ -26,17 +32,17 @@ describe('@/utils/grid.js', () => {
   });
 
   describe('class Grid', () => {
-    it('numRows', () => {
+    test('numRows', () => {
       expect(gridFromString.numRows).toBe(10);
       expect(gridFromFilename.numRows).toBe(10);
     });
 
-    it('numCols', () => {
+    test('numCols', () => {
       expect(gridFromString.numCols).toBe(10);
       expect(gridFromFilename.numCols).toBe(10);
     });
 
-    it.each`
+    test.each`
       location                | expected
       ${{ row: 0, col: 0 }}   | ${'0'}
       ${{ row: 2, col: 1 }}   | ${'9'}
@@ -47,7 +53,7 @@ describe('@/utils/grid.js', () => {
       expect(gridFromFilename.at(location)).toBe(expected);
     });
 
-    it.each`
+    test.each`
       location                | expected
       ${{ row: 0, col: 0 }}   | ${'0'}
       ${{ row: 5, col: 1 }}   | ${'X'}
@@ -59,7 +65,7 @@ describe('@/utils/grid.js', () => {
       expect(gridFromFilename.currentLocation).toStrictEqual(location);
     });
 
-    it('find()', () => {
+    test('find()', () => {
       const expected = { row: 8, col: 4 };
       expect(gridFromString.find('S')).toStrictEqual(expected);
       expect(gridFromFilename.find('S')).toStrictEqual(expected);
