@@ -12,6 +12,15 @@ export default class Grid {
 
   #currentLocation;
 
+  static equal(a, b) {
+    if (!a || !b) { return false; }
+    return a.row === b.row && a.col === b.col;
+  }
+
+  static notEqual(a, b) {
+    return !Grid.equal(a, b);
+  }
+
   constructor({ gridString, gridFilename }) {
     if (gridString) {
       this.#gridRaw = gridString;
@@ -93,18 +102,22 @@ export default class Grid {
   }
 
   peekUp() {
-    return this.at({ row: this.#currentLocation.row - 1, col: this.#currentLocation.col });
+    const location = { row: this.#currentLocation.row - 1, col: this.#currentLocation.col };
+    return { location, value: this.at(location) };
   }
 
   peekDown() {
-    return this.at({ row: this.#currentLocation.row + 1, col: this.#currentLocation.col });
+    const location = { row: this.#currentLocation.row + 1, col: this.#currentLocation.col }
+    return { location, value: this.at(location) };
   }
 
   peekLeft() {
-    return this.at({ row: this.#currentLocation.row, col: this.#currentLocation.col - 1 });
+    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col - 1 }
+    return { location, value: this.at(location) };
   }
 
   peekRight() {
-    return this.at({ row: this.#currentLocation.row, col: this.#currentLocation.col + 1 });
+    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col + 1 }
+    return { location, value: this.at(location) };
   }
 }
