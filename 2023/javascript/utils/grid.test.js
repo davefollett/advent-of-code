@@ -1,5 +1,6 @@
 import Grid from './grid.js';
 
+/* eslint-disable-next-line no-multi-str */
 const gridString = '\
 0123456789\n\
 9012345678\n\

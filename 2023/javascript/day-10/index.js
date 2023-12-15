@@ -7,23 +7,25 @@ import Grid from '../utils/grid.js';
 function determineDirection({ prevDirection, currentValue }) {
   const moveLookup = {
     'left_-': 'left',
-    'left_L': 'up',
-    'left_F': 'down',
+    left_L: 'up',
+    left_F: 'down',
     'right_-': 'right',
-    'right_J': 'up',
-    'right_7': 'down',
+    right_J: 'up',
+    right_7: 'down',
     'down_|': 'down',
-    'down_J': 'left',
-    'down_L': 'right',
+    down_J: 'left',
+    down_L: 'right',
     'up_|': 'up',
-    'up_7': 'left',
-    'up_F': 'right',
+    up_7: 'left',
+    up_F: 'right',
   };
 
   return moveLookup[`${prevDirection}_${currentValue}`];
 }
 
-function determineFirstDirection({upValue, downValue, leftValue, rightValue}) {
+function determineFirstDirection({
+  upValue, downValue, leftValue, rightValue,
+}) {
   const validMoveUpValues = ['|', 'F', '7'];
   const validMoveDownValues = ['|', 'L', 'J'];
   const validMoveLeftValues = ['-', 'F', 'L'];
@@ -33,23 +35,24 @@ function determineFirstDirection({upValue, downValue, leftValue, rightValue}) {
   if (validMoveDownValues.includes(downValue)) { return 'down'; }
   if (validMoveLeftValues.includes(leftValue)) { return 'left'; }
   if (validMoveRightValues.includes(rightValue)) { return 'right'; }
+  return 'error';
 }
 
 export function part1(filename) {
   const grid = new Grid({ gridFilename: filename });
-  let currentLocation = grid.find('S');
+  const currentLocation = grid.find('S');
   let currentValue = grid.moveTo(currentLocation);
 
   const directionToNextMove = {
-    'up': grid.moveUp.bind(grid),
-    'down': grid.moveDown.bind(grid),
-    'left': grid.moveLeft.bind(grid),
-    'right': grid.moveRight.bind(grid),
+    up: grid.moveUp.bind(grid),
+    down: grid.moveDown.bind(grid),
+    left: grid.moveLeft.bind(grid),
+    right: grid.moveRight.bind(grid),
   };
 
   let steps = 1;
 
-  let nextDirection = determineFirstDirection({ 
+  let nextDirection = determineFirstDirection({
     upValue: grid.peekUp().value,
     downValue: grid.peekDown().value,
     leftValue: grid.peekLeft().value,
@@ -63,15 +66,17 @@ export function part1(filename) {
     nextDirection = determineDirection({ prevDirection, currentValue });
     currentValue = directionToNextMove[nextDirection]();
     prevDirection = nextDirection;
-    steps += 1
-  } while (currentValue !== 'S')
+    steps += 1;
+  } while (currentValue !== 'S');
 
   return steps / 2;
 }
 
 export function part2(filename) {
-  // const lines = fileParser(filename);
-  return 0;
+  const grid = new Grid({ gridFilename: filename });
+  const currentLocation = grid.find('S');
+  const currentValue = grid.moveTo(currentLocation);
+  return currentValue;
 }
 
 export function run() {

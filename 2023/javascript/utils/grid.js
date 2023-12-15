@@ -76,6 +76,7 @@ export default class Grid {
         }
       }
     }
+    return { row: -1, col: -1 };
   }
 
   moveTo({ row, col }) {
@@ -107,17 +108,17 @@ export default class Grid {
   }
 
   peekDown() {
-    const location = { row: this.#currentLocation.row + 1, col: this.#currentLocation.col }
+    const location = { row: this.#currentLocation.row + 1, col: this.#currentLocation.col };
     return { location, value: this.at(location) };
   }
 
   peekLeft() {
-    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col - 1 }
+    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col - 1 };
     return { location, value: this.at(location) };
   }
 
   peekRight() {
-    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col + 1 }
+    const location = { row: this.#currentLocation.row, col: this.#currentLocation.col + 1 };
     return { location, value: this.at(location) };
   }
 }
