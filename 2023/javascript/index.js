@@ -9,6 +9,7 @@ import { run as day06Run } from './day-06/index.js';
 import { run as day07Run } from './day-07/index.js';
 import { run as day08Run } from './day-08/index.js';
 import { run as day10Run } from './day-10/index.js';
+import { run as day11Run } from './day-11/index.js';
 import { run as day15Run } from './day-15/index.js';
 
 const PORT = 8080;
@@ -37,6 +38,7 @@ const sidebar = `
   <a class="link" href="/day-07">Day 07</a>
   <a class="link" href="/day-08">Day 08</a>
   <a class="link" href="/day-10">Day 10</a>
+  <a class="link" href="/day-11">Day 11</a>
   <a class="link" href="/day-15">Day 15</a>
 `;
 
@@ -93,6 +95,11 @@ app.get('/day-08', (req, res) => {
 
 app.get('/day-10', (req, res) => {
   const results = day10Run();
+  res.send(template(formatResult(results), sidebar));
+});
+
+app.get('/day-11', (req, res) => {
+  const results = day11Run();
   res.send(template(formatResult(results), sidebar));
 });
 
