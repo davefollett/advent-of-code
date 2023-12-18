@@ -4,29 +4,78 @@ import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
 import { fileParserToString } from '../utils/file-parser.js';
 
+function hash(step) {
+  let result = 0;
+  for (const c of step) {
+    result += c.charCodeAt(0);
+    result *= 17;
+    result %= 256;
+  }
+  return result;
+}
+
 export function part1(filename) {
   const steps = fileParserToString(filename)
     .split(',')
-    .reduce((accu, step) => {
-      let stepTotal = 0;
-      for (const c of step) {
-        stepTotal += c.charCodeAt(0);
-        stepTotal *= 17;
-        stepTotal = stepTotal % 256;
-      }
-      return accu + stepTotal;
-    }, 0);
+    .reduce((accu, step) => accu + hash(step), 0);
 
   return steps;
 }
 
-function lineParserP2(line) {
-  return line;
-}
-
 export function part2(filename) {
-  const lines = fileParser(filename, lineParserP2);
-  return 0;
+  const hashmap = {};
+  const steps = fileParserToString(filename)
+    .split(',')
+    .map((step) => {
+      const result = {};
+      if (step.includes('=')) {
+        /* eslint-disable-next-line prefer-destructuring */
+        result.label = step.split('=')[0];
+        result.hash = hash(result.label);
+        result.focalLength = parseInt(step.split('=')[1], 10);
+        result.operation = '=';
+      } else {
+        /* eslint-disable-next-line prefer-destructuring */
+        result.label = step.split('-')[0];
+        result.hash = hash(result.label);
+        result.focalLength = 0;
+        result.operation = '-';
+      }
+      return result;
+    });
+
+  steps.forEach((step) => {
+    const box = hashmap[step.hash];
+    if (step.operation === '-') {
+      if (box) {
+        const index = box.findIndex((lens) => lens.label === step.label);
+        if (index !== -1) {
+          box.splice(index, 1);
+        }
+      }
+    } else {
+      /* eslint-disable-next-line no-lonely-if */
+      if (box) {
+        const index = box.findIndex((lens) => lens.label === step.label);
+        if (index !== -1) {
+          box.splice(index, 1, step);
+        } else {
+          box.push(step);
+        }
+      } else {
+        hashmap[step.hash] = new Array(step);
+      }
+    }
+  });
+
+  let result = 0;
+  for (const [boxNumber, lenses] of Object.entries(hashmap)) {
+    /* eslint-disable-next-line no-loop-func */
+    lenses.forEach((lens, index) => {
+      result += (parseInt(boxNumber, 10) + 1) * (index + 1) * (lens.focalLength);
+    });
+  }
+  return result;
 }
 
 export function run() {
