@@ -2,8 +2,50 @@
 
 import { performance } from 'node:perf_hooks';
 import Result from '../utils/result.js';
+import Grid from '../utils/grid.js';
+
+const EMPTY = '.';
+const GALAXY = '#';
 
 export function part1(filename) {
+  const grid = new Grid({ gridFilename: filename });
+  let emptyRow = Array(grid.numCols).fill(EMPTY);
+  let emptyCol = Array(grid.numRows).fill(EMPTY);
+
+  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
+
+  console.log(emptyRow.join('') + '\n');
+  const emptyRowIndexes = grid.findAllRows(emptyRow);
+  const emptyColIndexes = grid.findAllCols(emptyCol);
+
+  console.log(grid.raw)
+  console.log('\n')
+  emptyRowIndexes.forEach((rowIndex, index) => {
+    grid.insertRow({ index: rowIndex + index, value: emptyRow});
+  });
+
+  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
+
+  console.log(grid.raw)
+  console.log('\n')
+
+  emptyCol = Array(grid.numRows).fill(EMPTY);
+  console.log(emptyCol.join('') + '\n');
+  // console.log(emptyCol.length);
+
+  emptyColIndexes.forEach((colIndex, index) => {
+    grid.insertCol({ index: colIndex + index, value: emptyCol})
+  });
+
+  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
+  console.log(grid.raw)
+  console.log('\n')
+
+  // console.log(grid.at({ row: 3, col: 12}))
+  // console.log('emptyRowIndexes=', emptyRowIndexes);
+  // console.log('emptyColIndexes=', emptyColIndexes);
+  // console.log(grid.numRows, grid.numCols);
+
   return 0;
 }
 

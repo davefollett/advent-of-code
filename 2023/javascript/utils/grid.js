@@ -43,6 +43,15 @@ export default class Grid {
     this.#currentLocation = { row: 0, col: 0 };
   }
 
+  #resetRaw() {
+    const rowJoins = [];
+    for (let row = 0; row < this.#grid.length; row += 1) {
+      rowJoins.push(this.#grid[row].join(''));
+      console.log(this.#grid[row].length)
+    }
+    this.#gridRaw = rowJoins.join('\n');
+  }
+
   #validateRange({ row, col }) {
     if (row >= this.#numRows || row < 0) { return false; }
     if (col >= this.#numCols || col < 0) { return false; }
@@ -170,5 +179,19 @@ export default class Grid {
   peekRight() {
     const location = { row: this.#currentLocation.row, col: this.#currentLocation.col + 1 };
     return { location, value: this.at(location) };
+  }
+
+  insertRow({ index, value }) {
+    this.#grid.splice(index, 0, value);
+    this.#numRows = this.#grid.length;
+    this.#resetRaw();
+  }
+
+  insertCol({ index, value }) {
+    for (let row = 0; row < this.#numRows; row += 1) {
+      this.#grid[row].splice(index, 0, value[row]);
+    }
+    this.#numCols = this.#grid[0].length;
+    this.#resetRaw();
   }
 }

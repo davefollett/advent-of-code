@@ -124,5 +124,39 @@ describe('@/utils/grid.js', () => {
         expect(gridFromFilename.findAllCols(value)).toStrictEqual(expected);
       });
     });
+
+    describe('insertRow()', () => {
+      test.skip('inserts 1 row', () => {
+        const numRows = gridFromString.numRows;
+        const numCols = gridFromString.numCols;
+        const insertIndex = 1;
+        const rowToInsert = Array(numCols).fill('+');
+        expect(gridFromString.insertRow({ index: insertIndex, value: rowToInsert}));
+        expect(gridFromFilename.insertRow({ index: insertIndex, value: rowToInsert}));
+        expect(gridFromString.numRows).toBe(numRows + 1);
+        expect(gridFromFilename.numRows).toBe(numRows + 1);
+        expect(gridFromString.at({ row: 1, col: 2})).toBe('+');
+        expect(gridFromFilename.at({ row: 1, col: 2})).toBe('+');
+        expect(gridFromString.at({ row: 1, col: 5})).toBe('+');
+        expect(gridFromFilename.at({ row: 1, col: 5})).toBe('+');
+      });
+    });
+
+    describe('insertCol()', () => {
+      test.skip('inserts 1 col', () => {
+        const numRows = gridFromString.numRows;
+        const numCols = gridFromString.numCols;
+        const insertIndex = 1;
+        const colToInsert = Array(numRows).fill('+');
+        expect(gridFromString.insertCol({ index: insertIndex, value: colToInsert}));
+        expect(gridFromFilename.insertCol({ index: insertIndex, value: colToInsert}));
+        expect(gridFromString.numCols).toBe(numCols + 1);
+        expect(gridFromFilename.numCols).toBe(numCols + 1);
+        expect(gridFromString.at({ row: 0, col: 1})).toBe('+');
+        expect(gridFromFilename.at({ row: 0, col: 1})).toBe('+');
+        expect(gridFromString.at({ row: 5, col: 1})).toBe('+');
+        expect(gridFromFilename.at({ row: 5, col: 1})).toBe('+');
+      });
+    });
   });
 });

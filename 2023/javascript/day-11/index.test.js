@@ -9,7 +9,7 @@ const testInputFilename = './day-11/test-input.txt';
 
 describe('@/day-11/index.js', () => {
   describe('part1()', () => {
-    test.skip('part1 should pass test input', () => {
+    test('part1 should pass test input', () => {
       const answer = part1(testInputFilename);
       expect(answer).toBe(0);
     });
