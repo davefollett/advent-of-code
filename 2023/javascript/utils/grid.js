@@ -21,6 +21,10 @@ export default class Grid {
     return !Grid.equal(a, b);
   }
 
+  static distanceBetween(locationA, locationB) {
+    return Math.abs(locationA.row - locationB.row) + Math.abs(locationA.col - locationB.col);
+  }
+
   constructor({ gridString, gridFilename }) {
     if (gridString) {
       this.#gridRaw = gridString;
@@ -77,6 +81,52 @@ export default class Grid {
       }
     }
     return { row: -1, col: -1 };
+  }
+
+  /**
+   * This function searches the grid for the provided value an returns all matches in an array.  If
+   * the value is not found, an empty array is returned.
+   *
+   * @param {string} value The value to search for in the grid.
+   * @returns An array of matching locations.
+   */
+  findAll(value) {
+    const result = [];
+    for (let row = 0; row < this.#grid.length; row += 1) {
+      for (let col = 0; col < this.#grid[row].length; col += 1) {
+        if (this.#grid[row][col] === value) {
+          result.push({ row, col });
+        }
+      }
+    }
+    return result;
+  }
+
+  findAllRows(value) {
+    const matchingRowIndexes = [];
+    const valueString = value.join();
+    for (let row = 0; row < this.#grid.length; row += 1) {
+      if (valueString === this.#grid[row].join()) {
+        matchingRowIndexes.push(row);
+      }
+    }
+    return matchingRowIndexes;
+  }
+
+  findAllCols(value) {
+    const matchingColIndexes = [];
+    const valueString = value.join();
+
+    for (let col = 0; col < this.#numCols; col += 1) {
+      let colValues = [];
+      for (let row = 0; row < this.#numRows; row += 1) {
+        colValues.push(this.#grid[row][col]);
+      }
+      if (colValues.join() === valueString) {
+        matchingColIndexes.push(col);
+      }
+    }
+    return matchingColIndexes;
   }
 
   moveTo({ row, col }) {

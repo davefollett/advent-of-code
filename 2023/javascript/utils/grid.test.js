@@ -70,5 +70,59 @@ describe('@/utils/grid.js', () => {
       expect(gridFromString.find('S')).toStrictEqual(expected);
       expect(gridFromFilename.find('S')).toStrictEqual(expected);
     });
+
+    describe('findAll()', () => {
+      test('returns an array of locations', () => {
+        const expected = [
+          { row: 0, col: 1 },
+          { row: 1, col: 2 },
+          { row: 2, col: 3 },
+          { row: 4, col: 1 },
+          { row: 6, col: 1 },
+        ];
+        expect(gridFromString.findAll('1')).toStrictEqual(expected);
+        expect(gridFromFilename.findAll('1')).toStrictEqual(expected);
+      });
+
+      test('returns [] if value not found', () => {
+        const expected = [];
+        expect(gridFromString.findAll('W')).toStrictEqual(expected);
+        expect(gridFromFilename.findAll('W')).toStrictEqual(expected);
+      });
+    });
+
+    describe('distanceBetween()', () => {
+      test.each`
+        locationA              | locationB              | expected
+        ${{ row: 0, col: 0 }}  | ${{ row: 0, col: 0 }}  | ${0}
+        ${{ row: 0, col: 0 }}  | ${{ row: 0, col: 1 }}  | ${1}
+        ${{ row: 3, col: 1 }}  | ${{ row: 5, col: 7 }}  | ${8}
+      `('returns the correct distance between locations', ({ locationA, locationB, expected }) => {
+        expect(Grid.distanceBetween(locationA, locationB)).toBe(expected);
+      });
+    });
+
+    describe('findAllRows()', () => {
+      test.each`
+        value                                                  | expected
+        ${['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']}  | ${[0, 4, 6]}
+        ${['5', '5', '5', '5', '5', '5', '5', '5', '5', '5']}  | ${[3]}
+        ${['8', '9', '0', '1', '2', '3', '4', '5', '6', '7']}  | ${[2]}
+      `('returns all matching row indexes', ({ value, expected }) => {
+        expect(gridFromString.findAllRows(value)).toStrictEqual(expected);
+        expect(gridFromFilename.findAllRows(value)).toStrictEqual(expected);
+      });
+    });
+
+    describe('findAllCols()', () => {
+      test.each`
+        value                                                  | expected
+        ${['9', '8', '7', '5', '9', '?', '9', 'B', '7', '0']}  | ${[9]}
+        ${['1', '0', '9', '5', '1', 'X', '1', 'B', '7', '4']}  | ${[1]}
+      `('returns all matching col indexes', ({ value, expected }) => {
+        expect(gridFromString.findAllCols(value)).toStrictEqual(expected);
+        expect(gridFromFilename.findAllCols(value)).toStrictEqual(expected);
+      });
+    });
   });
 });
