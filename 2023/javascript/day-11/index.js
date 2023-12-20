@@ -9,44 +9,29 @@ const GALAXY = '#';
 
 export function part1(filename) {
   const grid = new Grid({ gridFilename: filename });
-  let emptyRow = Array(grid.numCols).fill(EMPTY);
-  let emptyCol = Array(grid.numRows).fill(EMPTY);
 
-  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
-
-  console.log(emptyRow.join('') + '\n');
+  const emptyRow = Array(grid.numCols).fill(EMPTY);
   const emptyRowIndexes = grid.findAllRows(emptyRow);
-  const emptyColIndexes = grid.findAllCols(emptyCol);
-
-  console.log(grid.raw)
-  console.log('\n')
   emptyRowIndexes.forEach((rowIndex, index) => {
-    grid.insertRow({ index: rowIndex + index, value: emptyRow});
+    grid.insertRow({ index: rowIndex + index, value: emptyRow });
   });
 
-  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
-
-  console.log(grid.raw)
-  console.log('\n')
-
-  emptyCol = Array(grid.numRows).fill(EMPTY);
-  console.log(emptyCol.join('') + '\n');
-  // console.log(emptyCol.length);
-
+  const emptyCol = Array(grid.numRows).fill(EMPTY);
+  const emptyColIndexes = grid.findAllCols(emptyCol);
   emptyColIndexes.forEach((colIndex, index) => {
-    grid.insertCol({ index: colIndex + index, value: emptyCol})
+    grid.insertCol({ index: colIndex + index, value: emptyCol });
   });
 
-  console.log(`numRows=${grid.numRows} numCols=${grid.numCols}`);
-  console.log(grid.raw)
-  console.log('\n')
+  const allGalaxies = grid.findAll(GALAXY);
 
-  // console.log(grid.at({ row: 3, col: 12}))
-  // console.log('emptyRowIndexes=', emptyRowIndexes);
-  // console.log('emptyColIndexes=', emptyColIndexes);
-  // console.log(grid.numRows, grid.numCols);
+  let sumOfShortestPaths = 0;
+  for (let i = 0; i < allGalaxies.length; i += 1) {
+    for (let j = i + 1; j < allGalaxies.length; j += 1) {
+      sumOfShortestPaths += Grid.distanceBetween(allGalaxies[i], allGalaxies[j]);
+    }
+  }
 
-  return 0;
+  return sumOfShortestPaths;
 }
 
 export function part2(filename) {
