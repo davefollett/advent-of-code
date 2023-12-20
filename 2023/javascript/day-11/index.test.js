@@ -21,14 +21,14 @@ describe('@/day-11/index.js', () => {
   });
 
   describe('part2()', () => {
-    test.skip('part2 should pass test input', () => {
+    test('part2 should pass test input', () => {
       const answer = part2(testInputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(82000210);
     });
 
-    test.skip('part2 should pass', () => {
+    test('part2 should pass', () => {
       const answer = part2(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(630728425490);
     });
   });
 });
