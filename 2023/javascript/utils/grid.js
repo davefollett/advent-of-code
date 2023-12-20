@@ -47,7 +47,6 @@ export default class Grid {
     const rowJoins = [];
     for (let row = 0; row < this.#grid.length; row += 1) {
       rowJoins.push(this.#grid[row].join(''));
-      console.log(this.#grid[row].length)
     }
     this.#gridRaw = rowJoins.join('\n');
   }
@@ -127,7 +126,7 @@ export default class Grid {
     const valueString = value.join();
 
     for (let col = 0; col < this.#numCols; col += 1) {
-      let colValues = [];
+      const colValues = [];
       for (let row = 0; row < this.#numRows; row += 1) {
         colValues.push(this.#grid[row][col]);
       }
@@ -182,7 +181,8 @@ export default class Grid {
   }
 
   insertRow({ index, value }) {
-    this.#grid.splice(index, 0, value);
+    // insert a copy of the value array otherwise its inserting a reference
+    this.#grid.splice(index, 0, [...value]);
     this.#numRows = this.#grid.length;
     this.#resetRaw();
   }

@@ -20,6 +20,22 @@ ABABABABAB\n\
 3453453450\
 ';
 
+/* eslint-disable-next-line no-multi-str */
+const expectedRawForInsertRowsAndCols = '\
+01=23=4=56789\n\
+++=++=+=+++++\n\
+90=12=3=45678\n\
+89=01=2=34567\n\
+++=++=+=+++++\n\
+55=55=5=55555\n\
+01=23=4=56789\n\
+ZX=CV=B=NM<>?\n\
+01=23=4=56789\n\
+AB=AB=A=BABAB\n\
+87=87=S=78787\n\
+34=53=4=53450\
+';
+
 const gridFilename = './utils/files/grid.txt';
 
 describe('@/utils/grid.js', () => {
@@ -127,35 +143,56 @@ describe('@/utils/grid.js', () => {
 
     describe('insertRow()', () => {
       test.skip('inserts 1 row', () => {
+        /* eslint-disable-next-line prefer-destructuring */
         const numRows = gridFromString.numRows;
+        /* eslint-disable-next-line prefer-destructuring */
         const numCols = gridFromString.numCols;
         const insertIndex = 1;
         const rowToInsert = Array(numCols).fill('+');
-        expect(gridFromString.insertRow({ index: insertIndex, value: rowToInsert}));
-        expect(gridFromFilename.insertRow({ index: insertIndex, value: rowToInsert}));
+        expect(gridFromString.insertRow({ index: insertIndex, value: rowToInsert }));
+        expect(gridFromFilename.insertRow({ index: insertIndex, value: rowToInsert }));
         expect(gridFromString.numRows).toBe(numRows + 1);
         expect(gridFromFilename.numRows).toBe(numRows + 1);
-        expect(gridFromString.at({ row: 1, col: 2})).toBe('+');
-        expect(gridFromFilename.at({ row: 1, col: 2})).toBe('+');
-        expect(gridFromString.at({ row: 1, col: 5})).toBe('+');
-        expect(gridFromFilename.at({ row: 1, col: 5})).toBe('+');
+        expect(gridFromString.at({ row: 1, col: 2 })).toBe('+');
+        expect(gridFromFilename.at({ row: 1, col: 2 })).toBe('+');
+        expect(gridFromString.at({ row: 1, col: 5 })).toBe('+');
+        expect(gridFromFilename.at({ row: 1, col: 5 })).toBe('+');
       });
     });
 
     describe('insertCol()', () => {
       test.skip('inserts 1 col', () => {
+        /* eslint-disable-next-line prefer-destructuring */
         const numRows = gridFromString.numRows;
+        /* eslint-disable-next-line prefer-destructuring */
         const numCols = gridFromString.numCols;
         const insertIndex = 1;
         const colToInsert = Array(numRows).fill('+');
-        expect(gridFromString.insertCol({ index: insertIndex, value: colToInsert}));
-        expect(gridFromFilename.insertCol({ index: insertIndex, value: colToInsert}));
+        expect(gridFromString.insertCol({ index: insertIndex, value: colToInsert }));
+        expect(gridFromFilename.insertCol({ index: insertIndex, value: colToInsert }));
         expect(gridFromString.numCols).toBe(numCols + 1);
         expect(gridFromFilename.numCols).toBe(numCols + 1);
-        expect(gridFromString.at({ row: 0, col: 1})).toBe('+');
-        expect(gridFromFilename.at({ row: 0, col: 1})).toBe('+');
-        expect(gridFromString.at({ row: 5, col: 1})).toBe('+');
-        expect(gridFromFilename.at({ row: 5, col: 1})).toBe('+');
+        expect(gridFromString.at({ row: 0, col: 1 })).toBe('+');
+        expect(gridFromFilename.at({ row: 0, col: 1 })).toBe('+');
+        expect(gridFromString.at({ row: 5, col: 1 })).toBe('+');
+        expect(gridFromFilename.at({ row: 5, col: 1 })).toBe('+');
+      });
+    });
+
+    describe('insertRow() & insertCol()', () => {
+      test('insert 2 rows & 3 cols', () => {
+        const rowIndexes = [1, 3];
+        const rowToInsert = Array(gridFromFilename.numCols).fill('+');
+        expect(gridFromFilename.insertRow({ index: rowIndexes[0], value: rowToInsert }));
+        expect(gridFromFilename.insertRow({ index: rowIndexes[1] + 1, value: rowToInsert }));
+
+        const colIndexes = [2, 4, 5];
+        const colToInsert = Array(gridFromFilename.numRows).fill('=');
+        expect(gridFromFilename.insertCol({ index: colIndexes[0], value: colToInsert }));
+        expect(gridFromFilename.insertCol({ index: colIndexes[1] + 1, value: colToInsert }));
+        expect(gridFromFilename.insertCol({ index: colIndexes[2] + 2, value: colToInsert }));
+
+        expect(gridFromFilename.raw).toBe(expectedRawForInsertRowsAndCols);
       });
     });
   });
