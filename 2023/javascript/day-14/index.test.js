@@ -9,14 +9,14 @@ const testInputFilename = './day-14/test-input.txt';
 
 describe('@/day-14/index.js', () => {
   describe('part1()', () => {
-    test.skip('part1 should pass test input', () => {
+    test('part1 should pass test input', () => {
       const answer = part1(testInputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(136);
     });
 
-    test.skip('part1 should pass', () => {
+    test('part1 should pass', () => {
       const answer = part1(inputFilename);
-      expect(answer).toBe(0);
+      expect(answer).toBe(109665);
     });
   });
 

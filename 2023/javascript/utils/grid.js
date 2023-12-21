@@ -83,6 +83,7 @@ export default class Grid {
   changeAt({ row, col }, value) {
     if (!this.#validateRange({ row, col })) { return false; }
     this.#grid[row][col] = value;
+    this.#resetRaw();
     return true;
   }
 
