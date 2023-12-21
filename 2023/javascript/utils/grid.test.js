@@ -58,15 +58,45 @@ describe('@/utils/grid.js', () => {
       expect(gridFromFilename.numCols).toBe(10);
     });
 
-    test.each`
-      location                | expected
-      ${{ row: 0, col: 0 }}   | ${'0'}
-      ${{ row: 2, col: 1 }}   | ${'9'}
-      ${{ row: 6, col: 3 }}   | ${'3'}
-      ${undefined}            | ${'0'}
-    `('at()', ({ location, expected }) => {
-      expect(gridFromString.at(location)).toBe(expected);
-      expect(gridFromFilename.at(location)).toBe(expected);
+    describe('at()', () => {
+      test.each`
+        location                | expected
+        ${{ row: 0, col: 0 }}   | ${'0'}
+        ${{ row: 2, col: 1 }}   | ${'9'}
+        ${{ row: 6, col: 3 }}   | ${'3'}
+        ${undefined}            | ${'0'}
+      `('returns $expected at $location', ({ location, expected }) => {
+        expect(gridFromString.at(location)).toBe(expected);
+        expect(gridFromFilename.at(location)).toBe(expected);
+      });
+    });
+
+    describe('changeAt()', () => {
+      test.each`
+        location                    | value   | expected
+        ${{ row: 0, col: 0 }}       | ${'X'}  | ${true}
+        ${{ row: 2, col: 1 }}       | ${'Y'}  | ${true}
+        ${{ row: 6, col: 3 }}       | ${'Z'}  | ${true}
+      `('changes $location to $value', ({ location, value, expected }) => {
+        expect(gridFromString.changeAt(location, value)).toBe(expected);
+        expect(gridFromFilename.changeAt(location, value)).toBe(expected);
+        expect(gridFromString.at(location)).toBe(value);
+        expect(gridFromFilename.at(location)).toBe(value);
+      });
+
+      test.each`
+        location                  | value   | expected
+        ${{ row: -1, col: 3 }}    | ${'Z'}  | ${false}
+        ${{ row: -3, col: 400 }}  | ${'S'}  | ${false}
+      `('does not change $location to $value', ({ location, value, expected }) => {
+        const origValueGridString = gridFromString.at(location)
+        const origValueGridLocation = gridFromFilename.at(location)
+
+        expect(gridFromString.changeAt(location, value)).toBe(expected);
+        expect(gridFromFilename.changeAt(location, value)).toBe(expected);
+        expect(gridFromString.at(location)).toBe(origValueGridString);
+        expect(gridFromFilename.at(location)).toBe(origValueGridLocation);
+      });
     });
 
     test.each`

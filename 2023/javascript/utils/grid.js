@@ -80,6 +80,12 @@ export default class Grid {
     return this.#grid[row][col];
   }
 
+  changeAt({ row, col }, value) {
+    if (!this.#validateRange({ row, col })) { return false; }
+    this.#grid[row][col] = value;
+    return true;
+  }
+
   find(value) {
     for (let row = 0; row < this.#grid.length; row += 1) {
       for (let col = 0; col < this.#grid[row].length; col += 1) {
