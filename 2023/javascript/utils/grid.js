@@ -201,4 +201,8 @@ export default class Grid {
     this.#numCols = this.#grid[0].length;
     this.#resetRaw();
   }
+
+  print() {
+    console.log(this.raw + '\n');
+  }
 }
