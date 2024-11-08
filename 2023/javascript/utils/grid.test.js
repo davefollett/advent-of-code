@@ -225,5 +225,48 @@ describe('@/utils/grid.js', () => {
         expect(gridFromFilename.raw).toBe(expectedRawForInsertRowsAndCols);
       });
     });
+
+    // Experimental - Not fully tested
+    describe('moveNext()', () => {
+      test('move right first and then down', () => {
+        const expected = '<>?012';
+        let value = gridFromString.moveTo({ row: 5, col: 7 });
+        value += gridFromString.moveNext('right', 'down');
+        value += gridFromString.moveNext('right', 'down');
+        value += gridFromString.moveNext('right', 'down');
+        value += gridFromString.moveNext('right', 'down');
+        value += gridFromString.moveNext('right', 'down');
+        expect(value).toBe(expected);
+      });
+
+      test('move right first and then up', () => {
+        const expected = 'BAB012';
+        let value = gridFromString.moveTo({ row: 7, col: 7 });
+        value += gridFromString.moveNext('right', 'up');
+        value += gridFromString.moveNext('right', 'up');
+        value += gridFromString.moveNext('right', 'up');
+        value += gridFromString.moveNext('right', 'up');
+        value += gridFromString.moveNext('right', 'up');
+        expect(value).toBe(expected);
+      });
+
+      test.skip('move left first and then down', () => {
+      });
+
+      test.skip('move left first and then up', () => {
+      });
+
+      test.skip('move up first and then left', () => {
+      });
+
+      test.skip('move up first and then right', () => {
+      });
+
+      test.skip('move down first and then left', () => {
+      });
+
+      test.skip('move down first and then right', () => {
+      });
+    });
   });
 });

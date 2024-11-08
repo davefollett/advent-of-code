@@ -12,6 +12,8 @@ export default class Grid {
 
   #currentLocation;
 
+  #validDirections = ['up', 'down', 'left', 'right' ];
+
   static equal(a, b) {
     if (!a || !b) { return false; }
     return a.row === b.row && a.col === b.col;
@@ -56,6 +58,54 @@ export default class Grid {
     if (col >= this.#numCols || col < 0) { return false; }
 
     return true;
+  }
+
+  // Experimental - Not fully tested
+  #determineNextLocations(firstDirection, secondDirection) {
+    const result = {};
+    switch (firstDirection) {
+      case 'up':
+        result.firstLocation = { row: this.#currentLocation.row - 1, col: this.#currentLocation.col };
+        if (secondDirection === 'left') {
+          result.secondLocation = { row: this.#numRows - 1, col: this.#currentLocation.cols - 1 };
+        } else if (secondDirection === 'right') {
+          result.secondLocation = { row: this.#numRows - 1, col: this.#currentLocation.cols + 1 };
+        } else {
+          result.secondLocation = { row: -1, col: -1 };
+        }
+        break;
+      case 'down':
+        result.firstLocation = { row: this.#currentLocation.row + 1, col: this.#currentLocation.col };
+        if (secondDirection === 'left') {
+          result.secondLocation = { row: 0, col: this.#currentLocation.cols - 1 };
+        } else if (secondDirection === 'right') {
+          result.secondLocation = { row: 0, col: this.#currentLocation.cols + 1 };
+        } else {
+          result.secondLocation = { row: -1, col: -1 };
+        }
+        break;
+      case 'left':
+        result.firstLocation = { row: this.#currentLocation.row, col: this.#currentLocation.col - 1 };
+        if (secondDirection === 'down') {
+          result.secondLocation = { row: this.#currentLocation.row + 1, col: this.#numCols - 1 };
+        } else if (secondDirection === 'up') {
+          result.secondLocation = { row: this.#currentLocation.row - 1, col: this.#numCols - 1 };
+        } else {
+          result.secondLocation = { row: -1, col: -1 };
+        }
+        break;
+      case 'right':
+        result.firstLocation = { row: this.#currentLocation.row, col: this.#currentLocation.col + 1 };
+        if (secondDirection === 'down') {
+          result.secondLocation = { row: this.#currentLocation.row + 1, col: 0 };
+        } else if (secondDirection === 'up') {
+          result.secondLocation = { row: this.#currentLocation.row - 1, col: 0 };
+        } else {
+          result.secondLocation = { row: -1, col: -1 };
+        }
+        break;
+    }
+    return result;
   }
 
   get numRows() {
@@ -165,6 +215,21 @@ export default class Grid {
 
   moveRight() {
     return this.moveTo({ row: this.#currentLocation.row, col: this.#currentLocation.col + 1 });
+  }
+
+  moveNext(firstDirection, secondDirection) {
+    if (!this.#validDirections.includes(firstDirection)) { return null; }
+    if (!this.#validDirections.includes(secondDirection)) { return null; }
+
+    const next = this.#determineNextLocations(firstDirection, secondDirection);
+
+    if (this.at(next.firstLocation) !== null) {
+      return this.moveTo(next.firstLocation);
+    } else if (this.at(next.secondLocation) !== null) {
+      return this.moveTo(next.secondLocation);
+    }
+
+    return null;
   }
 
   peekUp() {
